@@ -55,10 +55,6 @@
     }
     .shake { animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both; }
 
-    #flash-overlay {
-      position: absolute; inset: 0; pointer-events: none; opacity: 0; z-index: 40; transition: opacity 0.25s ease-out;
-    }
-
     .screen {
       position: absolute; inset: 0; display: flex; flex-direction: column;
       opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease;
@@ -69,7 +65,7 @@
     /* 1. 메인 타이틀 화면 */
     #title-screen { justify-content: space-between; padding: 0 22px 24px; }
     .flag-wrapper {
-      position: absolute; top: 0; left: 0; width: 245px; height: 235px;
+      position: absolute; top: 0; left: 0; width: 250px; height: 240px;
       pointer-events: none; z-index: 1; transform-origin: top left;
       animation: flagWave 2.8s ease-in-out infinite alternate;
     }
@@ -78,52 +74,32 @@
       50% { transform: skewY(-1.8deg) scale(1.015, 0.99); }
       100% { transform: skewY(1.2deg) scale(0.995, 1.01); }
     }
-    .title-header { position: relative; z-index: 2; margin-top: 140px; text-align: right; }
-    .game-title { font-family: 'Patrick Hand', cursive; font-size: 3.2rem; line-height: 0.96; color: #0f172a; }
+    
+    .title-header { position: relative; z-index: 2; margin-top: 142px; text-align: right; }
+    .game-title { font-family: 'Patrick Hand', cursive; font-size: 3.1rem; line-height: 0.96; color: #0f172a; }
     .game-title span { display: block; }
     
-    /* 타이틀 왼쪽 공간에 배치된 닉네임 입력 컴포넌트 */
+    /* 타이틀 왼쪽 공간 닉네임 입력 상자 */
     .lobby-nickname-area {
-      position: absolute;
-      top: 155px;
-      left: 20px;
-      z-index: 3;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      position: absolute; top: 152px; left: 20px; z-index: 3;
+      display: flex; flex-direction: column; gap: 3px;
     }
-    .lobby-nickname-label {
-      font-size: 0.72rem;
-      font-weight: 900;
-      color: #475569;
-      letter-spacing: -0.2px;
-    }
+    .lobby-nickname-label { font-size: 0.7rem; font-weight: 900; color: #475569; }
     .lobby-nickname-input {
-      width: 130px;
-      padding: 7px 10px;
-      border: 2px solid #cbd5e1;
-      border-radius: 9px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      font-family: 'Noto Sans KR', sans-serif;
-      outline: none;
-      background: #f8fafc;
-      color: #0f172a;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-      transition: border-color 0.15s ease, background-color 0.15s ease;
+      width: 125px; padding: 6px 8px; border: 2px solid #cbd5e1; border-radius: 8px;
+      font-size: 0.86rem; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+      outline: none; background: #f8fafc; color: #0f172a;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03); transition: border-color 0.15s ease;
     }
-    .lobby-nickname-input:focus {
-      border-color: var(--primary-blue);
-      background: #ffffff;
-    }
+    .lobby-nickname-input:focus { border-color: var(--primary-blue); background: #fff; }
 
-    .title-divider { width: 100%; height: 2.5px; background-color: #1e293b; border-radius: 2px; margin-top: 26px; }
+    .title-divider { width: 100%; height: 2.5px; background-color: #1e293b; border-radius: 2px; margin-top: 22px; }
 
-    .lobby-best-wrap { display: flex; justify-content: center; align-items: center; margin: 8px 0; z-index: 2; }
+    .lobby-best-wrap { display: flex; justify-content: center; align-items: center; margin: 4px 0; z-index: 2; }
     .lobby-best-badge {
       display: inline-flex; align-items: center; gap: 6px; background: #f1f5f9;
-      border: 1.5px solid #e2e8f0; padding: 6px 14px; border-radius: 999px;
-      font-size: 0.82rem; font-weight: 700; color: #334155;
+      border: 1.5px solid #e2e8f0; padding: 5px 12px; border-radius: 999px;
+      font-size: 0.8rem; font-weight: 700; color: #334155;
     }
     .lobby-best-badge strong { color: var(--primary-blue); font-weight: 900; }
 
@@ -134,17 +110,18 @@
     .interactive-btn:hover { transform: translateY(-2.5px) scale(1.012); filter: brightness(1.06); }
     .interactive-btn:active { transform: translateY(3px) scale(0.975); filter: brightness(0.95); }
 
-    .menu-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: auto; margin-bottom: 14px; z-index: 2; }
+    .menu-buttons { display: flex; flex-direction: column; gap: 8px; margin-top: auto; margin-bottom: 12px; z-index: 2; }
     .arcade-btn {
-      width: 100%; padding: 14px 20px; border: none; border-radius: 12px;
+      width: 100%; padding: 12px 20px; border: none; border-radius: 12px;
       background: linear-gradient(180deg, var(--primary-blue-light) 0%, var(--primary-blue) 100%);
-      color: #ffffff; font-family: 'Noto Sans KR', sans-serif; font-size: 1.2rem; font-weight: 700;
+      color: #ffffff; font-family: 'Noto Sans KR', sans-serif; font-size: 1.12rem; font-weight: 700;
       box-shadow: 0 4px 0 var(--primary-blue-dark), 0 8px 16px rgba(22, 96, 156, 0.22);
     }
+    .arcade-btn.secondary { background: #334155; box-shadow: 0 4px 0 #1e293b; }
     .footer-bar {
       background-color: var(--footer-navy); color: #ffffff; border-radius: 10px;
-      padding: 9px 16px; display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.85rem; font-weight: 700;
+      padding: 8px 14px; display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.82rem; font-weight: 700;
     }
 
     /* 카운트다운 & 본게임 & 오버 */
@@ -202,7 +179,6 @@
     .result-sub-item span { display: block; font-size: 0.7rem; color: var(--text-muted); }
     .result-sub-item strong { font-size: 1rem; color: #0f172a; }
     .gameover-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; }
-    .arcade-btn.secondary { background: #334155; box-shadow: 0 4px 0 #1e293b; }
 
     /* 모달 공통 */
     .modal-backdrop {
@@ -214,7 +190,7 @@
     .modal-box { width: 100%; max-width: 350px; background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 35px rgba(0,0,0,0.25); }
     .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px; }
     .modal-title { font-size: 1.2rem; font-weight: 900; color: var(--footer-navy); }
-    .modal-close { background: #f1f5f9; border: none; width: 28px; height: 28px; border-radius: 8px; font-weight: 900; color: #475569; }
+    .modal-close { background: #f1f5f9; border: none; width: 28px; height: 28px; border-radius: 8px; font-weight: 900; color: #475569; cursor: pointer; }
 
     .rank-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 220px; overflow-y: auto; }
     .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #f8fafc; border-radius: 8px; font-size: 0.88rem; font-weight: 700; }
@@ -223,8 +199,12 @@
     .rank-num { width: 22px; height: 22px; border-radius: 6px; background: var(--primary-blue); color: #fff; font-size: 0.75rem; display: flex; justify-content: center; align-items: center; }
     .rank-score { font-weight: 900; color: var(--primary-blue); }
     .modal-footer-btns { display: flex; gap: 8px; }
-    .btn-small { flex: 1; padding: 10px; border: none; border-radius: 10px; font-weight: 700; font-size: 0.9rem; background: var(--primary-blue); color: #fff; box-shadow: 0 3px 0 var(--primary-blue-dark); }
+    .btn-small { flex: 1; padding: 10px; border: none; border-radius: 10px; font-weight: 700; font-size: 0.9rem; background: var(--primary-blue); color: #fff; box-shadow: 0 3px 0 var(--primary-blue-dark); cursor: pointer; }
     .btn-small.danger { background: #fee2e2; color: #dc2626; box-shadow: 0 3px 0 #fca5a5; }
+
+    /* 튜토리얼 내용 스타일 */
+    .tutorial-content { font-size: 0.88rem; color: #334155; line-height: 1.5; margin-bottom: 16px; }
+    .tutorial-content p { margin-bottom: 8px; }
   </style>
 </head>
 <body>
@@ -234,17 +214,17 @@
     <!-- 메인 타이틀 화면 -->
     <section id="title-screen" class="screen active">
       <div class="flag-wrapper">
-        <svg viewBox="0 0 260 250" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 250 240" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <clipPath id="flag-clip"><path d="M 0,0 L 222,0 C 192,82 126,158 0,192 Z" /></clipPath>
+            <clipPath id="flag-clip"><path d="M 0,0 L 210,0 C 182,78 118,148 0,182 Z" /></clipPath>
             <linearGradient id="fabric-shade" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#000" stop-opacity="0.16" />
               <stop offset="100%" stop-color="#000" stop-opacity="0.22" />
             </linearGradient>
           </defs>
           <g clip-path="url(#flag-clip)">
-            <rect x="0" y="0" width="240" height="210" fill="#f8fafc" />
-            <g transform="rotate(-17 85 75)">
+            <rect x="0" y="0" width="230" height="200" fill="#f8fafc" />
+            <g transform="rotate(-17 80 70)">
               <rect x="-30" y="-30" width="38" height="38" fill="#111827" />
               <rect x="46" y="-30" width="38" height="38" fill="#111827" />
               <rect x="122" y="-30" width="38" height="38" fill="#111827" />
@@ -255,12 +235,12 @@
               <rect x="46" y="46" width="38" height="38" fill="#111827" />
               <rect x="122" y="46" width="38" height="38" fill="#111827" />
             </g>
-            <rect x="0" y="0" width="240" height="210" fill="url(#fabric-shade)" />
+            <rect x="0" y="0" width="230" height="200" fill="url(#fabric-shade)" />
           </g>
         </svg>
       </div>
 
-      <!-- 타이틀 왼쪽 아래 (가로줄 위, 체커플래그 아래) 닉네임 입력 영역 -->
+      <!-- 타이틀 왼쪽 닉네임 입력 영역 -->
       <div class="lobby-nickname-area">
         <label for="nickname-input" class="lobby-nickname-label">닉네임</label>
         <input type="text" id="nickname-input" class="lobby-nickname-input" maxlength="10" value="플레이어" placeholder="닉네임 입력">
@@ -277,12 +257,13 @@
 
       <div class="menu-buttons">
         <button id="btn-start" class="arcade-btn interactive-btn">게임 시작</button>
-        <button id="btn-leaderboard" class="arcade-btn interactive-btn">온라인 순위표</button>
+        <button id="btn-tutorial" class="arcade-btn secondary interactive-btn">튜토리얼</button>
+        <button id="btn-leaderboard" class="arcade-btn secondary interactive-btn">온라인 순위표</button>
       </div>
 
       <footer class="footer-bar">
         <span>Made by F9m1is</span>
-        <span>v.1.3.0</span>
+        <span>v.1.3.1</span>
       </footer>
     </section>
 
@@ -341,6 +322,25 @@
       </div>
     </section>
 
+    <!-- 튜토리얼 모달 -->
+    <div id="tutorial-modal" class="modal-backdrop">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="modal-title">📖 게임 튜토리얼</h3>
+          <button class="modal-close interactive-btn" data-close="tutorial-modal">✕</button>
+        </div>
+        <div class="tutorial-content">
+          <p>⚡ <b>제한 시간 30초</b> 동안 빠르게 사칙연산 문제를 풀어 고득점을 달성하세요!</p>
+          <p>🔥 <b>콤보 시스템</b>: 정답을 맞히면 콤보와 점수가 올라갑니다. 5콤보 달성 시 제한 시간이 <b>+1.5초 회복</b>됩니다!</p>
+          <p>❌ <b>오답 페널티</b>: 틀리면 제한 시간이 <b>-2.0초 감소</b>하고 콤보가 초기화됩니다.</p>
+          <p>⌨️ 화면 버튼 클릭 외에도 키보드 <b>[1, 2, 3]</b> 또는 방향키로 정답을 빠르게 입력할 수 있습니다.</p>
+        </div>
+        <div class="modal-footer-btns">
+          <button class="btn-small interactive-btn" data-close="tutorial-modal">확인</button>
+        </div>
+      </div>
+    </div>
+
     <!-- 순위표 모달 -->
     <div id="leaderboard-modal" class="modal-backdrop">
       <div class="modal-box">
@@ -370,7 +370,6 @@
   </div>
 
   <script>
-    // 전달해주신 Bin ID와 Master Key 적용 완료
     const JSONBIN_BIN_ID = '6af88774ac6210605a8795f0';
     const JSONBIN_MASTER_KEY = '$2a$10$WysnhXQIOUh9EaaImSSSruXKgNX3.U9X3CxmPY7cX/lZcdZ34QLE2';
 
@@ -422,7 +421,7 @@
       return false;
     }
 
-    // JSONBin.io 온라인 순위 불러오기 (GET)
+    // JSONBin.io 랭킹 불러오기 (CORS 및 데이터 포맷 안정성 강화)
     async function fetchOnlineLeaderboard() {
       const listEl = document.getElementById('rank-list');
       try {
@@ -430,8 +429,8 @@
           headers: { 'X-Master-Key': JSONBIN_MASTER_KEY }
         });
         const json = await res.json();
-        const data = json.record.ranking || [];
-        if (data.length === 0) {
+        const data = json.record?.ranking || json.ranking || [];
+        if (!Array.isArray(data) || data.length === 0) {
           listEl.innerHTML = '<li style="text-align:center; padding:20px; color:#6b7280;">등록된 온라인 기록이 없습니다.</li>';
           return;
         }
@@ -440,11 +439,11 @@
             <div class="rank-left">
               <span class="rank-num">${idx + 1}</span>
               <div>
-                <div style="font-weight:900; color:#0f172a;">${escapeHtml(rec.nickname)}</div>
-                <div style="font-size:0.68rem; color:#6b7280;">최대 ${rec.maxCombo}콤보 · ${rec.date}</div>
+                <div style="font-weight:900; color:#0f172a;">${escapeHtml(rec.nickname || '익명')}</div>
+                <div style="font-size:0.68rem; color:#6b7280;">최대 ${rec.maxCombo || 0}콤보 · ${rec.date || ''}</div>
               </div>
             </div>
-            <div class="rank-score">${rec.score.toLocaleString()} 점</div>
+            <div class="rank-score">${Number(rec.score || 0).toLocaleString()} 점</div>
           </li>
         `).join('');
       } catch (e) {
@@ -452,16 +451,16 @@
       }
     }
 
-    // JSONBin.io 온라인 점수 등록 (PUT)
+    // JSONBin.io 랭킹 등록
     async function submitScoreOnline(score, maxCombo) {
       if (score <= 0) return;
       const nickname = (nicknameInput.value.trim() || '플레이어').slice(0, 10);
       try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+        const getRes = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
           headers: { 'X-Master-Key': JSONBIN_MASTER_KEY }
         });
-        const json = await res.json();
-        const currentList = json.record.ranking || [];
+        const getJson = await getRes.json();
+        const currentList = getJson.record?.ranking || getJson.ranking || [];
 
         const now = new Date();
         const dateStr = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
@@ -484,12 +483,10 @@
     }
 
     function escapeHtml(str) {
-      return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+      return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
     }
 
-    // 제한 시간 30초 설정
     const GAME_TIME = 30.0;
-
     let state = { isPlaying: false, score: 0, combo: 0, maxCombo: 0, timeLeft: GAME_TIME, currentAnswer: 0, choices: [], timerInterval: null, lastTimestamp: 0 };
     const screens = { title: document.getElementById('title-screen'), game: document.getElementById('game-screen'), gameover: document.getElementById('gameover-screen') };
     const countdownOverlay = document.getElementById('countdown-overlay'), countdownText = document.getElementById('countdown-text');
@@ -542,11 +539,8 @@
       const clamped = Math.max(0, state.timeLeft);
       timerText.textContent = `${clamped.toFixed(1)}s`;
       timerFill.style.width = `${(clamped / GAME_TIME) * 100}%`;
-      if (clamped <= 10.0) {
-        timerFill.classList.add('danger');
-      } else {
-        timerFill.classList.remove('danger');
-      }
+      if (clamped <= 10.0) { timerFill.classList.add('danger'); }
+      else { timerFill.classList.remove('danger'); }
     }
 
     function startGame() {
@@ -591,9 +585,9 @@
     document.getElementById('btn-start').addEventListener('click', startGame);
     document.getElementById('btn-retry').addEventListener('click', startGame);
     document.getElementById('btn-home').addEventListener('click', () => { sfx.playClick(); updateLobbyBest(); showScreen('title'); });
+    document.getElementById('btn-tutorial').addEventListener('click', () => { sfx.playClick(); document.getElementById('tutorial-modal').classList.add('active'); });
     document.getElementById('btn-leaderboard').addEventListener('click', () => { sfx.playClick(); fetchOnlineLeaderboard(); document.getElementById('leaderboard-modal').classList.add('active'); });
     
-    // 내 기기 로컬 기록만 초기화 (타 유저 랭킹은 영향 없음)
     document.getElementById('btn-reset-rank').addEventListener('click', () => { sfx.playClick(); document.getElementById('confirm-reset-modal').classList.add('active'); });
     document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
       sfx.playClick(); localStorage.removeItem(STORAGE_KEY); updateLobbyBest();
