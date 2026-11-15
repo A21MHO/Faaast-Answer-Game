@@ -108,7 +108,6 @@
       margin-top: auto; margin-bottom: 14px; z-index: 2;
     }
     
-    /* 자물쇠 박스 제거 및 닉네임 입력 칸 전체 너비 복원 스타일 */
     .lobby-nickname-wrap { display: flex; justify-content: flex-start; margin-bottom: 2px; }
     .lobby-nickname-input {
       width: 52%; min-width: 165px; padding: 7px 11px;
@@ -215,11 +214,11 @@
       opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
     }
     .modal-backdrop.active { opacity: 1; pointer-events: auto; }
-    .modal-box { width: 100%; max-width: 350px; background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 35px rgba(0,0,0,0.25); max-height: 85vh; display: flex; flex-direction: column; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px; flex-shrink: 0; }
-    .modal-title { font-size: 1.15rem; font-weight: 900; color: var(--footer-navy); }
+    .modal-box { width: 100%; max-width: 350px; background: #fff; border-radius: 16px; box-shadow: 0 20px 35px rgba(0,0,0,0.25); max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; }
     
-    /* 새로고침 텍스트 버튼 스타일 */
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding: 14px 16px; flex-shrink: 0; }
+    .modal-title { font-size: 1.1rem; font-weight: 900; color: var(--footer-navy); }
+    
     .modal-refresh-btn {
       background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 5px 10px; border-radius: 8px;
       font-weight: 700; color: #334155; cursor: pointer; font-size: 0.8rem; font-family: 'Noto Sans KR', sans-serif;
@@ -227,19 +226,38 @@
     }
     .modal-refresh-btn:hover { background: #e2e8f0; }
 
-    .rank-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 230px; overflow-y: auto; }
-    .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #f8fafc; border-radius: 8px; font-size: 0.88rem; font-weight: 700; }
+    .modal-body-content { padding: 16px; display: flex; flex-direction: column; overflow: hidden; flex: 1; }
+
+    /* 닉네임 미입력 커스텀 알림 팝업 전용 스타일 (요구사항 1 반영) */
+    .custom-alert-box {
+      width: 100%; max-width: 300px; background: #fff; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.25); display: flex; flex-direction: column;
+    }
+    .custom-alert-header {
+      background: var(--primary-blue); color: #fff; font-size: 0.9rem; font-weight: 900; padding: 8px 16px;
+    }
+    .custom-alert-body {
+      padding: 20px 16px; font-size: 0.95rem; font-weight: 700; color: #1e293b; text-align: center;
+    }
+    .custom-alert-footer {
+      padding: 0 16px 16px; display: flex; justify-content: center;
+    }
+
+    /* 순위표 전체 스크롤 리스트 (요구사항 2 반영) */
+    .rank-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 280px; overflow-y: auto; padding-right: 4px; }
+    .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; background: #f8fafc; border-radius: 10px; font-size: 0.88rem; font-weight: 700; flex-shrink: 0; }
     
-    /* 1, 2, 3위 금, 은, 동 메달 스타일 적용 */
+    /* 1, 2, 3위 배경 스타일 */
     .rank-item.top-1 { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1.5px solid #f59e0b; }
     .rank-item.top-2 { background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); border: 1.5px solid #94a3b8; }
     .rank-item.top-3 { background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%); border: 1.5px solid #f97316; }
 
-    .rank-left { display: flex; align-items: center; gap: 8px; }
-    .rank-num { width: 24px; height: 24px; border-radius: 6px; background: var(--primary-blue); color: #fff; font-size: 0.75rem; display: flex; justify-content: center; align-items: center; }
-    .rank-item.top-1 .rank-num { background: #d97706; }
-    .rank-item.top-2 .rank-num { background: #64748b; }
-    .rank-item.top-3 .rank-num { background: #c2410c; }
+    .rank-left { display: flex; align-items: center; gap: 10px; }
+    .rank-num { width: 26px; height: 26px; border-radius: 6px; background: #e2e8f0; color: #334155; font-size: 0.8rem; font-weight: 900; display: flex; justify-content: center; align-items: center; }
+    
+    /* 요구사항 3: 메달이 닉네임 오른쪽에 뜨도록 설정 */
+    .nickname-with-medal { display: inline-flex; align-items: center; gap: 5px; font-weight: 900; color: #0f172a; }
+    .medal-icon { font-size: 0.95rem; }
 
     .rank-score { font-weight: 900; color: var(--primary-blue); }
     .modal-footer-btns { display: flex; gap: 8px; flex-shrink: 0; }
@@ -311,7 +329,6 @@
       </div>
 
       <div class="bottom-controls">
-        <!-- 닉네임 입력 칸 (자물쇠 아이콘 제거 및 기존 레이아웃 복원) -->
         <div class="lobby-nickname-wrap">
           <input type="text" id="nickname-input" class="lobby-nickname-input" maxlength="10" placeholder="플레이어 닉네임 입력">
         </div>
@@ -322,7 +339,7 @@
 
       <footer class="footer-bar">
         <span>Made by F9m1is</span>
-        <span>v.1.3.3</span>
+        <span>v.1.3.4</span>
       </footer>
     </section>
 
@@ -389,41 +406,45 @@
           <h3 class="modal-title">📖 게임 튜토리얼</h3>
           <button class="modal-close interactive-btn" data-close="tutorial-modal">✕</button>
         </div>
-        <div class="tutorial-steps-container">
-          <div class="tutorial-card">
-            <div class="step-badge">1</div>
-            <div class="step-desc"><b>제한 시간 30초</b> 동안 1~9 사이의 사칙연산 문제를 빠르게 풀어 최고 점수에 도전하세요!</div>
+        <div class="modal-body-content">
+          <div class="tutorial-steps-container">
+            <div class="tutorial-card">
+              <div class="step-badge">1</div>
+              <div class="step-desc"><b>제한 시간 30초</b> 동안 1~9 사이의 사칙연산 문제를 빠르게 풀어 최고 점수에 도전하세요!</div>
+            </div>
+            <div class="tutorial-card">
+              <div class="step-badge">2</div>
+              <div class="step-desc"><b>콤보 시스템</b>: 정답을 맞힐수록 점수가 가중됩니다. <b>5콤보 달성 시 제한 시간 +1.5초 회복!</b></div>
+            </div>
+            <div class="tutorial-card">
+              <div class="step-badge">3</div>
+              <div class="step-desc"><b>오답 페널티</b>: 틀리면 콤보가 초기화되고 제한 시간이 <b>-2.0초 감소</b>합니다.</div>
+            </div>
+            <div class="tutorial-card">
+              <div class="step-badge">4</div>
+              <div class="step-desc"><b>조작 방법</b>: 화면 버튼 터치 외에도 키보드 <b>[1, 2, 3]</b> 또는 <b>[←, ↓, →]</b> 방향키로 초고속 입력 가능!</div>
+            </div>
           </div>
-          <div class="tutorial-card">
-            <div class="step-badge">2</div>
-            <div class="step-desc"><b>콤보 시스템</b>: 정답을 맞힐수록 점수가 가중됩니다. <b>5콤보 달성 시 제한 시간 +1.5초 회복!</b></div>
+          <div class="modal-footer-btns">
+            <button class="btn-small interactive-btn" data-close="tutorial-modal">확인</button>
           </div>
-          <div class="tutorial-card">
-            <div class="step-badge">3</div>
-            <div class="step-desc"><b>오답 페널티</b>: 틀리면 콤보가 초기화되고 제한 시간이 <b>-2.0초 감소</b>합니다.</div>
-          </div>
-          <div class="tutorial-card">
-            <div class="step-badge">4</div>
-            <div class="step-desc"><b>조작 방법</b>: 화면 버튼 터치 외에도 키보드 <b>[1, 2, 3]</b> 또는 <b>[←, ↓, →]</b> 방향키로 초고속 입력 가능!</div>
-          </div>
-        </div>
-        <div class="modal-footer-btns">
-          <button class="btn-small interactive-btn" data-close="tutorial-modal">확인</button>
         </div>
       </div>
     </div>
 
-    <!-- 순위표 모달 (우측 상단 텍스트 '새로고침' 버튼 적용) -->
+    <!-- 순위표 모달 (전체 순위 스크롤 지원 및 메달 위치 닉네임 오른쪽으로 변경) -->
     <div id="leaderboard-modal" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header">
-          <h3 class="modal-title">🌍 온라인 순위표 (TOP 10)</h3>
+          <h3 class="modal-title">🌍 온라인 순위표</h3>
           <button id="btn-modal-refresh" class="modal-refresh-btn interactive-btn">새로고침</button>
         </div>
-        <ul id="rank-list" class="rank-list"><li style="text-align:center; padding:20px; color:#6b7280;">랭킹 불러오는 중...</li></ul>
-        <div class="modal-footer-btns">
-          <button id="btn-reset-rank" class="btn-small danger interactive-btn">내 기기 기록만 초기화</button>
-          <button class="btn-small interactive-btn" data-close="leaderboard-modal">OK</button>
+        <div class="modal-body-content">
+          <ul id="rank-list" class="rank-list"><li style="text-align:center; padding:20px; color:#6b7280;">랭킹 불러오는 중...</li></ul>
+          <div class="modal-footer-btns">
+            <button id="btn-reset-rank" class="btn-small danger interactive-btn">내 기기 기록만 초기화</button>
+            <button class="btn-small interactive-btn" data-close="leaderboard-modal">OK</button>
+          </div>
         </div>
       </div>
     </div>
@@ -432,20 +453,33 @@
     <div id="confirm-reset-modal" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header"><h3 class="modal-title">⚠️ 초기화 확인</h3><button class="modal-close interactive-btn" data-close="confirm-reset-modal">✕</button></div>
-        <p style="font-size:0.92rem; color:#334155; text-align:center; line-height:1.5; margin-bottom:18px;">
-          기기의 최고 기록이 0점으로 초기화됩니다. 초기화 하시겠습니까?<br>
-          <span style="display:block; font-size:0.82rem; color:#94a3b8; margin-top:6px;">(닉네임은 변경할 수 없습니다.)</span>
-        </p>
-        <div class="modal-footer-btns">
-          <button class="btn-small interactive-btn" style="background:#64748b;" data-close="confirm-reset-modal">취소</button>
-          <button id="btn-confirm-reset-yes" class="btn-small danger interactive-btn">초기화</button>
+        <div class="modal-body-content" style="text-align:center;">
+          <p style="font-size:0.92rem; color:#334155; line-height:1.5; margin-bottom:18px;">
+            기기의 최고 기록이 0점으로 초기화됩니다. 초기화 하시겠습니까?<br>
+            <span style="display:block; font-size:0.82rem; color:#94a3b8; margin-top:6px;">(닉네임은 변경할 수 없습니다.)</span>
+          </p>
+          <div class="modal-footer-btns">
+            <button class="btn-small interactive-btn" style="background:#64748b;" data-close="confirm-reset-modal">취소</button>
+            <button id="btn-confirm-reset-yes" class="btn-small danger interactive-btn">초기화</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 요구사항 1: 커스텀 알림 모달 팝업 -->
+    <div id="custom-alert-modal" class="modal-backdrop">
+      <div class="custom-alert-box">
+        <div class="custom-alert-header">알림!</div>
+        <div class="custom-alert-body">닉네임을 입력해주세요.</div>
+        <div class="custom-alert-footer">
+          <button id="custom-alert-ok" class="btn-small interactive-btn" style="max-width: 100px;">확인</button>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxFCPFf3vGy07Mae4bojGzygJ1GS0Ntmfbm_uWcm3TdSVuehCIgmTo4HTgNvKvTG2iJ/exec';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxwMeMKjDTSbC9WXGUT5NaawTUi-DX4YM9g5SmTjkqQYEpS7obt7bHEdsbaKLzrR63L/exec';
 
     const DEVICE_TOKEN_KEY = 'faaast_answer_device_token';
     const NICKNAME_KEY = 'faaast_answer_nickname';
@@ -463,7 +497,6 @@
       nicknameInput.value = savedNick;
     }
 
-    // 서버와 연동하여 해당 토큰의 닉네임이 이미 등록되어 있다면 입력창 영구 잠금 유지
     async function checkServerLockStatus() {
       try {
         const res = await fetch(GAS_WEB_APP_URL);
@@ -537,6 +570,7 @@
       return false;
     }
 
+    // 요구사항 2 & 3: 전체 순위 출력 및 닉네임 우측 메달 표시
     async function fetchOnlineLeaderboard() {
       const listEl = document.getElementById('rank-list');
       listEl.innerHTML = '<li style="text-align:center; padding:20px; color:#6b7280;">랭킹 불러오는 중...</li>';
@@ -553,15 +587,21 @@
           else if (idx === 1) topClass = 'top-2';
           else if (idx === 2) topClass = 'top-3';
 
-          const rankBadge = idx === 0 ? '🥇 1' : idx === 1 ? '🥈 2' : idx === 2 ? '🥉 3' : (idx + 1);
+          // 메달은 닉네임 오른쪽에 배치하기 위해 별도 마크업 구성
+          let medalHtml = '';
+          if (idx === 0) medalHtml = '<span class="medal-icon">🥇</span>';
+          else if (idx === 1) medalHtml = '<span class="medal-icon">🥈</span>';
+          else if (idx === 2) medalHtml = '<span class="medal-icon">🥉</span>';
 
           return `
             <li class="rank-item ${topClass}">
               <div class="rank-left">
-                <span class="rank-num">${rankBadge}</span>
+                <span class="rank-num">${idx + 1}</span>
                 <div>
-                  <div style="font-weight:900; color:#0f172a;">${escapeHtml(rec.nickname || '익명')}</div>
-                  <div style="font-size:0.68rem; color:#6b7280;">최대 ${rec.maxCombo || 0}콤보 · ${rec.timestamp ? new Date(rec.timestamp).toLocaleDateString() : ''}</div>
+                  <div class="nickname-with-medal">
+                    ${escapeHtml(rec.nickname || '익명')} ${medalHtml}
+                  </div>
+                  <div style="font-size:0.68rem; color:#6b7280; margin-top:2px;">최대 ${rec.maxCombo || 0}콤보 · ${rec.timestamp ? new Date(rec.timestamp).toLocaleDateString() : ''}</div>
                 </div>
               </div>
               <div class="rank-score">${Number(rec.score || 0).toLocaleString()} 점</div>
@@ -691,8 +731,9 @@
     function startGame() {
       const nickVal = nicknameInput.value.trim();
       if (!nickVal) {
-        alert('닉네임을 입력해주세요!');
-        nicknameInput.focus();
+        // 요구사항 1: 브라우저 기본 알림 대신 커스텀 알림 팝업 오픈
+        sfx.playClick();
+        document.getElementById('custom-alert-modal').classList.add('active');
         return;
       }
       localStorage.setItem(NICKNAME_KEY, nickVal);
@@ -763,7 +804,6 @@
 
     document.getElementById('btn-reset-rank').addEventListener('click', () => { sfx.playClick(); document.getElementById('confirm-reset-modal').classList.add('active'); });
     
-    // 초기화 시: 로컬 기록 0점 리셋 + 서버 시트 점수/콤보 0점 리셋 (시트 행은 유지되어 닉네임 잠금 상태는 그대로 보존됨)
     document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
       sfx.playClick();
       localStorage.removeItem(STORAGE_KEY);
@@ -771,6 +811,13 @@
       updateLobbyBest();
       document.getElementById('confirm-reset-modal').classList.remove('active');
       document.getElementById('leaderboard-modal').classList.remove('active');
+    });
+
+    // 커스텀 알림 팝업 확인 버튼 이벤트
+    document.getElementById('custom-alert-ok').addEventListener('click', () => {
+      sfx.playClick();
+      document.getElementById('custom-alert-modal').classList.remove('active');
+      nicknameInput.focus();
     });
 
     document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', (e) => {
