@@ -108,14 +108,10 @@
       margin-top: auto; margin-bottom: 14px; z-index: 2;
     }
     
-    /* 닉네임 입력 칸 왼쪽에 자물쇠 아이콘 배치 */
-    .lobby-nickname-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
-    .lock-icon-box {
-      width: 38px; height: 38px; background: #f1f5f9; border: 1.5px solid #cbd5e1;
-      border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; flex-shrink: 0;
-    }
+    /* 자물쇠 아이콘이 제거되고 닉네임 입력 칸이 전체 너비를 채우도록 복원 */
+    .lobby-nickname-wrap { display: flex; justify-content: flex-start; margin-bottom: 2px; }
     .lobby-nickname-input {
-      flex: 1; padding: 7px 11px;
+      width: 52%; min-width: 165px; padding: 7px 11px;
       border: 1.5px solid #cbd5e1; border-radius: 6px;
       font-size: 0.82rem; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
       outline: none; background: #ffffff; color: #111827;
@@ -223,7 +219,6 @@
     .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px; flex-shrink: 0; }
     .modal-title { font-size: 1.15rem; font-weight: 900; color: var(--footer-navy); }
     
-    /* X 닫기 버튼 대신 새로고침 버튼 디자인 */
     .modal-refresh-btn {
       background: #f1f5f9; border: 1.5px solid #cbd5e1; width: 32px; height: 32px; border-radius: 8px;
       font-weight: 900; color: #334155; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 1rem;
@@ -315,9 +310,8 @@
       </div>
 
       <div class="bottom-controls">
-        <!-- 닉네임 입력 칸 왼쪽 자물쇠 아이콘 연동 -->
+        <!-- 자물쇠 아이콘이 제거된 닉네임 입력 창 -->
         <div class="lobby-nickname-wrap">
-          <div id="lock-icon-box" class="lock-icon-box">🔓</div>
           <input type="text" id="nickname-input" class="lobby-nickname-input" maxlength="10" placeholder="플레이어 닉네임 입력">
         </div>
         <button id="btn-start" class="arcade-btn interactive-btn">게임 시작</button>
@@ -327,7 +321,7 @@
 
       <footer class="footer-bar">
         <span>Made by F9m1is</span>
-        <span>v.1.3.1</span>
+        <span>v.1.3.2</span>
       </footer>
     </section>
 
@@ -418,7 +412,7 @@
       </div>
     </div>
 
-    <!-- 순위표 모달 (우측 상단 X 닫기 버튼 대신 새로고침 버튼 적용) -->
+    <!-- 순위표 모달 (우측 상단 X 대신 새로고침 버튼) -->
     <div id="leaderboard-modal" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header">
@@ -433,7 +427,7 @@
       </div>
     </div>
 
-    <!-- 초기화 재확인 모달 (요청하신 문구 및 스타일 적용) -->
+    <!-- 초기화 재확인 모달 (요청하신 문구 반영) -->
     <div id="confirm-reset-modal" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header"><h3 class="modal-title">⚠️ 초기화 확인</h3><button class="modal-close interactive-btn" data-close="confirm-reset-modal">✕</button></div>
@@ -450,7 +444,7 @@
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwCgt4c8cpAJsKCCtnHv1NG6WfEyMbzOmQf92QRDZBY4vqqBUU4eB6yKY6tgrDSXUVJ/exec';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx1Xm9oR88qUd6p3Y4ZO0WdwvkDCcBJ1w3WC6Y6LtoMbku1f1tkoX9iA5Rv4vNcdf_7/exec';
 
     const DEVICE_TOKEN_KEY = 'faaast_answer_device_token';
     const NICKNAME_KEY = 'faaast_answer_nickname';
@@ -463,26 +457,23 @@
     }
 
     const nicknameInput = document.getElementById('nickname-input');
-    const lockIconBox = document.getElementById('lock-icon-box');
     const savedNick = localStorage.getItem(NICKNAME_KEY);
     if (savedNick) {
       nicknameInput.value = savedNick;
     }
 
-    // 서버와 연동하여 닉네임 잠금 상태 및 UI(자물쇠 모양) 동기화 검증 함수
+    // 서버와 연동하여 닉네임 잠금 상태(입력 불가 및 잠금 유지) 확인
     async function checkServerLockStatus() {
       try {
         const res = await fetch(GAS_WEB_APP_URL);
         const data = await res.json();
         if (Array.isArray(data)) {
           const myEntry = data.find(item => item.token === deviceToken);
-          if (myEntry && myEntry.nickname && String(myEntry.score || 0) > 0) {
-            // 서버 시트에 토큰과 닉네임, 그리고 점수 기록이 확실히 존재할 때만 영구 잠금 유지
+          if (myEntry && myEntry.nickname) {
             nicknameInput.value = myEntry.nickname;
             localStorage.setItem(NICKNAME_KEY, myEntry.nickname);
             localStorage.setItem(NICKNAME_LOCKED_KEY, 'true');
             nicknameInput.disabled = true;
-            lockIconBox.textContent = '🔒';
             return;
           }
         }
@@ -490,13 +481,10 @@
         console.error('서버 잠금 상태 확인 실패', e);
       }
 
-      // 서버에 기록이 없거나 완전히 초기화된 경우 잠금 해제 상태(풀린 자물쇠) 유지
       if (localStorage.getItem(NICKNAME_LOCKED_KEY) === 'true' && nicknameInput.value.trim() !== '') {
         nicknameInput.disabled = true;
-        lockIconBox.textContent = '🔒';
       } else {
         nicknameInput.disabled = false;
-        lockIconBox.textContent = '🔓';
       }
     }
 
@@ -558,7 +546,6 @@
           listEl.innerHTML = '<li style="text-align:center; padding:20px; color:#6b7280;">등록된 온라인 기록이 없습니다.</li>';
           return;
         }
-        // 1, 2, 3위 메달(금, 은, 동) 디자인 클래스 적용
         listEl.innerHTML = data.map((rec, idx) => {
           let topClass = '';
           if (idx === 0) topClass = 'top-1';
@@ -710,7 +697,6 @@
       localStorage.setItem(NICKNAME_KEY, nickVal);
       localStorage.setItem(NICKNAME_LOCKED_KEY, 'true');
       nicknameInput.disabled = true;
-      lockIconBox.textContent = '🔒';
 
       sfx.init(); 
       showScreen('game');
@@ -769,7 +755,6 @@
     document.getElementById('btn-tutorial').addEventListener('click', () => { sfx.playClick(); document.getElementById('tutorial-modal').classList.add('active'); });
     document.getElementById('btn-leaderboard').addEventListener('click', () => { sfx.playClick(); fetchOnlineLeaderboard(); document.getElementById('leaderboard-modal').classList.add('active'); });
     
-    // 순위표 모달 내 새로고침 버튼 이벤트
     document.getElementById('btn-modal-refresh').addEventListener('click', () => {
       sfx.playClick();
       fetchOnlineLeaderboard();
@@ -777,15 +762,10 @@
 
     document.getElementById('btn-reset-rank').addEventListener('click', () => { sfx.playClick(); document.getElementById('confirm-reset-modal').classList.add('active'); });
     
-    // 초기화 확정 시: 로컬 기록 삭제 + 서버(시트) 행 삭제 요청 + 닉네임 잠금 해제 및 자물쇠 풀림(🔓) 아이콘 반영
+    // 초기화 시: 로컬 기록 0점 리셋 + 서버 시트 점수/콤보 0점 리셋 (단, 닉네임과 행은 유지되어 잠금 상태 유지)
     document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
       sfx.playClick();
       localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(NICKNAME_KEY);
-      localStorage.removeItem(NICKNAME_LOCKED_KEY);
-      nicknameInput.value = '';
-      nicknameInput.disabled = false;
-      lockIconBox.textContent = '🔓';
       resetRecordOnline(); 
       updateLobbyBest();
       document.getElementById('confirm-reset-modal').classList.remove('active');
@@ -807,7 +787,7 @@
     });
 
     updateLobbyBest();
-    checkServerLockStatus(); // 페이지 로드 시 서버 기준으로 닉네임 잠금 및 자물쇠 상태 확인
+    checkServerLockStatus();
   </script>
 </body>
 </html>
