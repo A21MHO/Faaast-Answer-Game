@@ -119,6 +119,12 @@
       border-color: var(--primary-blue);
       box-shadow: 0 0 0 3px rgba(39, 99, 156, 0.15);
     }
+    .lobby-nickname-input:disabled {
+      background-color: #e2e8f0;
+      color: #475569;
+      border-color: #cbd5e1;
+      cursor: not-allowed;
+    }
 
     .interactive-btn {
       position: relative; overflow: hidden; cursor: pointer;
@@ -206,8 +212,8 @@
       opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
     }
     .modal-backdrop.active { opacity: 1; pointer-events: auto; }
-    .modal-box { width: 100%; max-width: 350px; background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 35px rgba(0,0,0,0.25); }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px; }
+    .modal-box { width: 100%; max-width: 350px; background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 35px rgba(0,0,0,0.25); max-height: 85vh; display: flex; flex-direction: column; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px; flex-shrink: 0; }
     .modal-title { font-size: 1.15rem; font-weight: 900; color: var(--footer-navy); }
     .modal-close { background: #f1f5f9; border: none; width: 28px; height: 28px; border-radius: 8px; font-weight: 900; color: #475569; cursor: pointer; }
 
@@ -217,12 +223,23 @@
     .rank-left { display: flex; align-items: center; gap: 8px; }
     .rank-num { width: 22px; height: 22px; border-radius: 6px; background: var(--primary-blue); color: #fff; font-size: 0.75rem; display: flex; justify-content: center; align-items: center; }
     .rank-score { font-weight: 900; color: var(--primary-blue); }
-    .modal-footer-btns { display: flex; gap: 8px; }
+    .modal-footer-btns { display: flex; gap: 8px; flex-shrink: 0; }
     .btn-small { flex: 1; padding: 10px; border: none; border-radius: 10px; font-weight: 700; font-size: 0.9rem; background: var(--primary-blue); color: #fff; box-shadow: 0 3px 0 var(--primary-blue-dark); cursor: pointer; }
     .btn-small.danger { background: #fee2e2; color: #dc2626; box-shadow: 0 3px 0 #fca5a5; }
 
-    .tutorial-content { font-size: 0.9rem; color: #334155; line-height: 1.55; margin-bottom: 16px; }
-    .tutorial-content p { margin-bottom: 8px; }
+    /* 튜토리얼 칸 나누기 스타일 */
+    .tutorial-steps-container {
+      display: flex; flex-direction: column; gap: 10px; overflow-y: auto; max-height: 320px; padding-right: 4px; margin-bottom: 14px;
+    }
+    .tutorial-card {
+      background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 12px;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .step-badge {
+      background: var(--primary-blue); color: #fff; font-size: 0.75rem; font-weight: 900;
+      width: 22px; height: 22px; border-radius: 6px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-desc { font-size: 0.84rem; color: #334155; line-height: 1.45; }
   </style>
 </head>
 <body>
@@ -285,7 +302,7 @@
 
       <footer class="footer-bar">
         <span>Made by F9m1is</span>
-        <span>v.1.3.4</span>
+        <span>v.1.1.1</span>
       </footer>
     </section>
 
@@ -352,11 +369,23 @@
           <h3 class="modal-title">📖 게임 튜토리얼</h3>
           <button class="modal-close interactive-btn" data-close="tutorial-modal">✕</button>
         </div>
-        <div class="tutorial-content">
-          <p>⚡ <b>제한 시간 30초</b> 동안 빠르게 사칙연산 문제를 풀어 고득점을 달성하세요!</p>
-          <p>🔥 <b>콤보 시스템</b>: 정답을 맞히면 콤보와 점수가 올라갑니다. 5콤보 달성 시 제한 시간이 <b>+1.5초 회복</b>됩니다!</p>
-          <p>❌ <b>오답 페널티</b>: 틀리면 제한 시간이 <b>-2.0초 감소</b>하고 콤보가 초기화됩니다.</p>
-          <p>⌨️ 화면 버튼 터치 외에도 키보드 <b>[1, 2, 3]</b> 또는 <b>[←, ↓, →]</b> 방향키로 빠르게 입력할 수 있습니다.</p>
+        <div class="tutorial-steps-container">
+          <div class="tutorial-card">
+            <div class="step-badge">1</div>
+            <div class="step-desc"><b>제한 시간 30초</b> 동안 1~9 사이의 사칙연산 문제를 빠르게 풀어 최고 점수에 도전하세요!</div>
+          </div>
+          <div class="tutorial-card">
+            <div class="step-badge">2</div>
+            <div class="step-desc"><b>콤보 시스템</b>: 정답을 맞힐수록 점수가 가중됩니다. <b>5콤보 달성 시 제한 시간 +1.5초 회복!</b></div>
+          </div>
+          <div class="tutorial-card">
+            <div class="step-badge">3</div>
+            <div class="step-desc"><b>오답 페널티</b>: 틀리면 콤보가 초기화되고 제한 시간이 <b>-2.0초 감소</b>합니다.</div>
+          </div>
+          <div class="tutorial-card">
+            <div class="step-badge">4</div>
+            <div class="step-desc"><b>조작 방법</b>: 화면 버튼 터치 외에도 키보드 <b>[1, 2, 3]</b> 또는 <b>[←, ↓, →]</b> 방향키로 초고속 입력 가능!</div>
+          </div>
         </div>
         <div class="modal-footer-btns">
           <button class="btn-small interactive-btn" data-close="tutorial-modal">확인</button>
@@ -373,7 +402,7 @@
         </div>
         <ul id="rank-list" class="rank-list"><li style="text-align:center; padding:20px; color:#6b7280;">랭킹 불러오는 중...</li></ul>
         <div class="modal-footer-btns">
-          <button id="btn-reset-rank" class="btn-small danger interactive-btn">내 기록만 초기화</button>
+          <button id="btn-reset-rank" class="btn-small danger interactive-btn">내 기기 기록만 초기화</button>
           <button class="btn-small interactive-btn" data-close="leaderboard-modal">OK</button>
         </div>
       </div>
@@ -383,7 +412,7 @@
     <div id="confirm-reset-modal" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header"><h3 class="modal-title">⚠️ 초기화 확인</h3><button class="modal-close interactive-btn" data-close="confirm-reset-modal">✕</button></div>
-        <p style="font-size:0.9rem; color:#334155; text-align:center; margin-bottom:16px;">내 기기에 저장된 개인 최고 기록만 삭제됩니다.<br><b>정말 초기화하시겠습니까?</b></p>
+        <p style="font-size:0.9rem; color:#334155; text-align:center; margin-bottom:16px;">기기에 저장된 닉네임 잠금 및 최고 기록이 해제됩니다.<br><b>정말 초기화하시겠습니까?</b></p>
         <div class="modal-footer-btns">
           <button class="btn-small interactive-btn" style="background:#64748b;" data-close="confirm-reset-modal">취소</button>
           <button id="btn-confirm-reset-yes" class="btn-small danger interactive-btn">초기화</button>
@@ -393,10 +422,34 @@
   </div>
 
   <script>
-    // 유저가 제공한 정확한 GAS 웹 앱 배포 URL 적용 완료
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxS2gt1_fansmYryo3nKVw_JzeXoG12qpyHW5vM2gQXekJRhwNnTIvTqCdD0T1F4lvH/exec';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw69OI_uk4ATSaIOlpFpE9V-ilzG1YOhnV5uvLfAv8stpTIlW5t6gVLX8c3H7Nw7pOH/exec';
 
-    // 효과음 볼륨 짱짱하게 상향 완료 (gain 0.45 ~ 0.5)
+    const DEVICE_TOKEN_KEY = 'faaast_answer_device_token';
+    const NICKNAME_KEY = 'faaast_answer_nickname';
+    const NICKNAME_LOCKED_KEY = 'faaast_answer_nick_locked';
+
+    let deviceToken = localStorage.getItem(DEVICE_TOKEN_KEY);
+    if (!deviceToken) {
+      deviceToken = 'tok_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem(DEVICE_TOKEN_KEY, deviceToken);
+    }
+
+    const nicknameInput = document.getElementById('nickname-input');
+    const savedNick = localStorage.getItem(NICKNAME_KEY);
+    if (savedNick) {
+      nicknameInput.value = savedNick;
+    }
+
+    if (localStorage.getItem(NICKNAME_LOCKED_KEY) === 'true' && nicknameInput.value.trim() !== '') {
+      nicknameInput.disabled = true;
+    }
+
+    nicknameInput.addEventListener('input', () => {
+      if (localStorage.getItem(NICKNAME_LOCKED_KEY) !== 'true') {
+        localStorage.setItem(NICKNAME_KEY, nicknameInput.value.trim());
+      }
+    });
+
     class SoundEngine {
       constructor() { this.ctx = null; this.enabled = true; }
       init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); if (this.ctx.state === 'suspended') this.ctx.resume(); }
@@ -420,14 +473,6 @@
     const sfx = new SoundEngine();
 
     const STORAGE_KEY = 'faaast_answer_my_record';
-    const NICKNAME_KEY = 'faaast_answer_nickname';
-
-    const nicknameInput = document.getElementById('nickname-input');
-    const savedNick = localStorage.getItem(NICKNAME_KEY);
-    if (savedNick) nicknameInput.value = savedNick;
-    nicknameInput.addEventListener('input', () => {
-      localStorage.setItem(NICKNAME_KEY, nicknameInput.value.trim());
-    });
 
     function getMyRecord() {
       try {
@@ -445,7 +490,6 @@
       return false;
     }
 
-    // 구글 시트(GAS) 실시간 랭킹 불러오기 (GET)
     async function fetchOnlineLeaderboard() {
       const listEl = document.getElementById('rank-list');
       listEl.innerHTML = '<li style="text-align:center; padding:20px; color:#6b7280;">랭킹 불러오는 중...</li>';
@@ -462,7 +506,7 @@
               <span class="rank-num">${idx + 1}</span>
               <div>
                 <div style="font-weight:900; color:#0f172a;">${escapeHtml(rec.nickname || '익명')}</div>
-                <div style="font-size:0.68rem; color:#6b7280;">${rec.timestamp ? new Date(rec.timestamp).toLocaleDateString() : ''}</div>
+                <div style="font-size:0.68rem; color:#6b7280;">최대 ${rec.maxCombo || 0}콤보 · ${rec.timestamp ? new Date(rec.timestamp).toLocaleDateString() : ''}</div>
               </div>
             </div>
             <div class="rank-score">${Number(rec.score || 0).toLocaleString()} 점</div>
@@ -473,7 +517,6 @@
       }
     }
 
-    // 구글 시트(GAS) 실시간 점수 등록 (POST)
     async function submitScoreOnline(score, maxCombo) {
       if (score <= 0) return;
       const nickname = (nicknameInput.value.trim() || '플레이어').slice(0, 10);
@@ -482,7 +525,7 @@
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nickname, score, maxCombo })
+          body: JSON.stringify({ nickname, score, maxCombo, token: deviceToken })
         });
       } catch (e) {
         console.error('온라인 점수 등록 실패', e);
@@ -577,6 +620,16 @@
     }
 
     function startGame() {
+      const nickVal = nicknameInput.value.trim();
+      if (!nickVal) {
+        alert('닉네임을 입력해주세요!');
+        nicknameInput.focus();
+        return;
+      }
+      localStorage.setItem(NICKNAME_KEY, nickVal);
+      localStorage.setItem(NICKNAME_LOCKED_KEY, 'true');
+      nicknameInput.disabled = true;
+
       sfx.init(); sfx.playClick(); showScreen('game');
       state.score = 0; state.combo = 0; state.maxCombo = 0; state.timeLeft = GAME_TIME;
       updateHUD(); generateQuestion();
@@ -623,9 +676,17 @@
     
     document.getElementById('btn-reset-rank').addEventListener('click', () => { sfx.playClick(); document.getElementById('confirm-reset-modal').classList.add('active'); });
     document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
-      sfx.playClick(); localStorage.removeItem(STORAGE_KEY); updateLobbyBest();
+      sfx.playClick();
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(NICKNAME_KEY);
+      localStorage.removeItem(NICKNAME_LOCKED_KEY);
+      localStorage.removeItem(DEVICE_TOKEN_KEY);
+      nicknameInput.value = '';
+      nicknameInput.disabled = false;
+      updateLobbyBest();
       document.getElementById('confirm-reset-modal').classList.remove('active');
       document.getElementById('leaderboard-modal').classList.remove('active');
+      location.reload();
     });
 
     document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', (e) => {
