@@ -108,7 +108,7 @@
       margin-top: auto; margin-bottom: 14px; z-index: 2;
     }
     
-    /* 자물쇠 아이콘이 제거되고 닉네임 입력 칸이 전체 너비를 채우도록 복원 */
+    /* 자물쇠 박스 제거 및 닉네임 입력 칸 전체 너비 복원 스타일 */
     .lobby-nickname-wrap { display: flex; justify-content: flex-start; margin-bottom: 2px; }
     .lobby-nickname-input {
       width: 52%; min-width: 165px; padding: 7px 11px;
@@ -219,12 +219,13 @@
     .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px; flex-shrink: 0; }
     .modal-title { font-size: 1.15rem; font-weight: 900; color: var(--footer-navy); }
     
+    /* 새로고침 텍스트 버튼 스타일 */
     .modal-refresh-btn {
-      background: #f1f5f9; border: 1.5px solid #cbd5e1; width: 32px; height: 32px; border-radius: 8px;
-      font-weight: 900; color: #334155; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 1rem;
-      transition: background 0.15s ease, transform 0.15s ease;
+      background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 5px 10px; border-radius: 8px;
+      font-weight: 700; color: #334155; cursor: pointer; font-size: 0.8rem; font-family: 'Noto Sans KR', sans-serif;
+      transition: background 0.15s ease;
     }
-    .modal-refresh-btn:hover { background: #e2e8f0; transform: rotate(45deg); }
+    .modal-refresh-btn:hover { background: #e2e8f0; }
 
     .rank-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 230px; overflow-y: auto; }
     .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #f8fafc; border-radius: 8px; font-size: 0.88rem; font-weight: 700; }
@@ -310,7 +311,7 @@
       </div>
 
       <div class="bottom-controls">
-        <!-- 닉네임 입력 창 -->
+        <!-- 닉네임 입력 칸 (자물쇠 아이콘 제거 및 기존 레이아웃 복원) -->
         <div class="lobby-nickname-wrap">
           <input type="text" id="nickname-input" class="lobby-nickname-input" maxlength="10" placeholder="플레이어 닉네임 입력">
         </div>
@@ -321,11 +322,11 @@
 
       <footer class="footer-bar">
         <span>Made by F9m1is</span>
-        <span>v.1.3.2</span>
+        <span>v.1.3.3</span>
       </footer>
     </section>
 
-    <!-- 시작 3초 카운트다운 -->
+    <!-- 3초 카운트다운 -->
     <div id="countdown-overlay">
       <div id="countdown-text">3</div>
       <div id="countdown-sub">준비하세요!</div>
@@ -412,12 +413,12 @@
       </div>
     </div>
 
-    <!-- 순위표 모달 -->
+    <!-- 순위표 모달 (우측 상단 텍스트 '새로고침' 버튼 적용) -->
     <div id="leaderboard-modal" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header">
           <h3 class="modal-title">🌍 온라인 순위표 (TOP 10)</h3>
-          <button id="btn-modal-refresh" class="modal-refresh-btn interactive-btn" title="새로고침">↺</button>
+          <button id="btn-modal-refresh" class="modal-refresh-btn interactive-btn">새로고침</button>
         </div>
         <ul id="rank-list" class="rank-list"><li style="text-align:center; padding:20px; color:#6b7280;">랭킹 불러오는 중...</li></ul>
         <div class="modal-footer-btns">
@@ -427,7 +428,7 @@
       </div>
     </div>
 
-    <!-- 초기화 재확인 모달 (요청하신 문구 반영) -->
+    <!-- 초기화 재확인 모달 -->
     <div id="confirm-reset-modal" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header"><h3 class="modal-title">⚠️ 초기화 확인</h3><button class="modal-close interactive-btn" data-close="confirm-reset-modal">✕</button></div>
@@ -444,7 +445,7 @@
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx1Xm9oR88qUd6p3Y4ZO0WdwvkDCcBJ1w3WC6Y6LtoMbku1f1tkoX9iA5Rv4vNcdf_7/exec';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxFCPFf3vGy07Mae4bojGzygJ1GS0Ntmfbm_uWcm3TdSVuehCIgmTo4HTgNvKvTG2iJ/exec';
 
     const DEVICE_TOKEN_KEY = 'faaast_answer_device_token';
     const NICKNAME_KEY = 'faaast_answer_nickname';
@@ -462,7 +463,7 @@
       nicknameInput.value = savedNick;
     }
 
-    // 서버와 연동하여 닉네임 잠금 상태(입력 불가 및 잠금 유지) 확인
+    // 서버와 연동하여 해당 토큰의 닉네임이 이미 등록되어 있다면 입력창 영구 잠금 유지
     async function checkServerLockStatus() {
       try {
         const res = await fetch(GAS_WEB_APP_URL);
@@ -762,7 +763,7 @@
 
     document.getElementById('btn-reset-rank').addEventListener('click', () => { sfx.playClick(); document.getElementById('confirm-reset-modal').classList.add('active'); });
     
-    // 초기화 시: 로컬 기록 0점 리셋 + 서버 시트 점수/콤보 0점 리셋 (단, 닉네임과 행은 유지되어 잠금 상태 유지)
+    // 초기화 시: 로컬 기록 0점 리셋 + 서버 시트 점수/콤보 0점 리셋 (시트 행은 유지되어 닉네임 잠금 상태는 그대로 보존됨)
     document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
       sfx.playClick();
       localStorage.removeItem(STORAGE_KEY);
