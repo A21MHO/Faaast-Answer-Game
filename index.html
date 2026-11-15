@@ -422,7 +422,7 @@
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyxZxgmmoz1O7Sjn-NHs8v-UW69iweg4gBC_A_2RptEw8EP6NhT85-m7Q7DDBrgAQIq/exec';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzE3KKkJuCCKj4v7P8gPrb8LT6DybQ8q9_dv0nrfJQwAU9D-dxTkAbRObqG5tFRctoU/exec';
 
     const DEVICE_TOKEN_KEY = 'faaast_answer_device_token';
     const NICKNAME_KEY = 'faaast_answer_nickname';
@@ -645,7 +645,7 @@
       localStorage.setItem(NICKNAME_LOCKED_KEY, 'true');
       nicknameInput.disabled = true;
 
-      // [요청 반영] 게임 시작 버튼 클릭 효과음(playClick) 제거 완료
+      // 게임 시작 버튼 클릭 효과음 제거 완료 후 즉시 진입
       sfx.init(); 
       showScreen('game');
       state.score = 0; state.combo = 0; state.maxCombo = 0; state.timeLeft = GAME_TIME;
@@ -669,7 +669,7 @@
           countdownOverlay.classList.remove('active');
           runGameLoop();
         }
-      }, 1000);
+      }, 1000); // 정확한 1초(1000ms) 간격
     }
 
     function runGameLoop() {
@@ -705,7 +705,7 @@
     
     document.getElementById('btn-reset-rank').addEventListener('click', () => { sfx.playClick(); document.getElementById('confirm-reset-modal').classList.add('active'); });
     
-    // [수정 반영] 초기화 시 로컬 점수 리셋 + 서버(시트) 기록 0점 리셋 + 닉네임 잠금 해제 및 입력창 활성화
+    // 초기화 시 로컬 점수 리셋 + 서버(구글 시트) 기록 0점 리셋 + 닉네임 잠금 해제 및 입력창 활성화 동기화
     document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
       sfx.playClick();
       localStorage.removeItem(STORAGE_KEY);
