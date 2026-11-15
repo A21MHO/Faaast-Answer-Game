@@ -302,7 +302,7 @@
 
       <footer class="footer-bar">
         <span>Made by F9m1is</span>
-        <span>v.1.1.1</span>
+        <span>v.1.2.6</span>
       </footer>
     </section>
 
@@ -412,7 +412,7 @@
     <div id="confirm-reset-modal" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header"><h3 class="modal-title">⚠️ 초기화 확인</h3><button class="modal-close interactive-btn" data-close="confirm-reset-modal">✕</button></div>
-        <p style="font-size:0.9rem; color:#334155; text-align:center; margin-bottom:16px;">기기에 저장된 닉네임 잠금 및 최고 기록이 해제됩니다.<br><b>정말 초기화하시겠습니까?</b></p>
+        <p style="font-size:0.9rem; color:#334155; text-align:center; margin-bottom:16px;">기기에 저장된 최고 기록만 초기화됩니다.<br>(닉네임은 서버에 영구 잠금되어 유지됩니다)</p>
         <div class="modal-footer-btns">
           <button class="btn-small interactive-btn" style="background:#64748b;" data-close="confirm-reset-modal">취소</button>
           <button id="btn-confirm-reset-yes" class="btn-small danger interactive-btn">초기화</button>
@@ -422,7 +422,7 @@
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw69OI_uk4ATSaIOlpFpE9V-ilzG1YOhnV5uvLfAv8stpTIlW5t6gVLX8c3H7Nw7pOH/exec';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwsTSx_4NdD-w4-ZHnunlSNwyjjri3MyS9T5oU760N0AgBnWnkgvEqcMrvUHq2la91m/exec';
 
     const DEVICE_TOKEN_KEY = 'faaast_answer_device_token';
     const NICKNAME_KEY = 'faaast_answer_nickname';
@@ -678,15 +678,9 @@
     document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
       sfx.playClick();
       localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(NICKNAME_KEY);
-      localStorage.removeItem(NICKNAME_LOCKED_KEY);
-      localStorage.removeItem(DEVICE_TOKEN_KEY);
-      nicknameInput.value = '';
-      nicknameInput.disabled = false;
       updateLobbyBest();
       document.getElementById('confirm-reset-modal').classList.remove('active');
       document.getElementById('leaderboard-modal').classList.remove('active');
-      location.reload();
     });
 
     document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', (e) => {
