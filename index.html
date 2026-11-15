@@ -72,7 +72,7 @@
     /* 메인 타이틀 화면 */
     #title-screen { justify-content: space-between; padding: 0 22px 20px; }
     .flag-wrapper {
-      position: absolute; top: 0; left: 0; width: 265px; height: 255px;
+      position: absolute; top: 0; left: 0; width: 270px; height: 260px;
       pointer-events: none; z-index: 1; transform-origin: top left;
       animation: flagWave 3s ease-in-out infinite alternate;
     }
@@ -252,7 +252,7 @@
         <svg viewBox="0 0 240 230" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <clipPath id="flag-clip">
-              <path d="M 0,0 L 225,0 C 190,88 120,158 0,195 Z" />
+              <path d="M 0,0 L 235,0 C 195,92 125,162 0,205 Z" />
             </clipPath>
             <linearGradient id="wave-shadow" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#000000" stop-opacity="0.22" />
@@ -262,23 +262,23 @@
             </linearGradient>
           </defs>
           <g clip-path="url(#flag-clip)">
-            <rect x="-10" y="-10" width="260" height="250" fill="#f3f4f6" />
+            <rect x="-20" y="-20" width="280" height="270" fill="#f3f4f6" />
             <g transform="rotate(-19 85 75)">
-              <rect x="-40" y="-40" width="45" height="45" fill="#090d16" />
-              <rect x="50" y="-40" width="45" height="45" fill="#090d16" />
-              <rect x="140" y="-40" width="45" height="45" fill="#090d16" />
-              <rect x="5" y="5" width="45" height="45" fill="#090d16" />
-              <rect x="95" y="5" width="45" height="45" fill="#090d16" />
-              <rect x="185" y="5" width="45" height="45" fill="#090d16" />
-              <rect x="-40" y="50" width="45" height="45" fill="#090d16" />
-              <rect x="50" y="50" width="45" height="45" fill="#090d16" />
-              <rect x="140" y="50" width="45" height="45" fill="#090d16" />
-              <rect x="5" y="95" width="45" height="45" fill="#090d16" />
-              <rect x="95" y="95" width="45" height="45" fill="#090d16" />
-              <rect x="-40" y="140" width="45" height="45" fill="#090d16" />
-              <rect x="50" y="140" width="45" height="45" fill="#090d16" />
+              <rect x="-50" y="-50" width="50" height="50" fill="#090d16" />
+              <rect x="50" y="-50" width="50" height="50" fill="#090d16" />
+              <rect x="150" y="-50" width="50" height="50" fill="#090d16" />
+              <rect x="0" y="0" width="50" height="50" fill="#090d16" />
+              <rect x="100" y="0" width="50" height="50" fill="#090d16" />
+              <rect x="200" y="0" width="50" height="50" fill="#090d16" />
+              <rect x="-50" y="50" width="50" height="50" fill="#090d16" />
+              <rect x="50" y="50" width="50" height="50" fill="#090d16" />
+              <rect x="150" y="50" width="50" height="50" fill="#090d16" />
+              <rect x="0" y="100" width="50" height="50" fill="#090d16" />
+              <rect x="100" y="100" width="50" height="50" fill="#090d16" />
+              <rect x="-50" y="150" width="50" height="50" fill="#090d16" />
+              <rect x="50" y="150" width="50" height="50" fill="#090d16" />
             </g>
-            <rect x="-10" y="-10" width="260" height="250" fill="url(#wave-shadow)" />
+            <rect x="-20" y="-20" width="280" height="270" fill="url(#wave-shadow)" />
           </g>
         </svg>
       </div>
@@ -302,7 +302,7 @@
 
       <footer class="footer-bar">
         <span>Made by F9m1is</span>
-        <span>v.1.2.7</span>
+        <span>v.1.2.8</span>
       </footer>
     </section>
 
@@ -412,7 +412,7 @@
     <div id="confirm-reset-modal" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header"><h3 class="modal-title">⚠️ 초기화 확인</h3><button class="modal-close interactive-btn" data-close="confirm-reset-modal">✕</button></div>
-        <p style="font-size:0.9rem; color:#334155; text-align:center; margin-bottom:16px;">기기의 최고 기록이 초기화되며,<br>서버(구글 시트) 기록도 0점으로 리셋됩니다.</p>
+        <p style="font-size:0.9rem; color:#334155; text-align:center; margin-bottom:16px;">기기의 최고 기록이 초기화되며,<br>서버(구글 시트) 기록도 0점으로 리셋됩니다.<br>(닉네임 잠금도 해제되어 새로 설정할 수 있습니다)</p>
         <div class="modal-footer-btns">
           <button class="btn-small interactive-btn" style="background:#64748b;" data-close="confirm-reset-modal">취소</button>
           <button id="btn-confirm-reset-yes" class="btn-small danger interactive-btn">초기화</button>
@@ -422,7 +422,7 @@
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxIkGd9M_VHcbvubq_3nimFzyOlbwluUiSNIF6R98iA2FHgdlIOc56Q19D8WFibYTAM';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyxZxgmmoz1O7Sjn-NHs8v-UW69iweg4gBC_A_2RptEw8EP6NhT85-m7Q7DDBrgAQIq/exec';
 
     const DEVICE_TOKEN_KEY = 'faaast_answer_device_token';
     const NICKNAME_KEY = 'faaast_answer_nickname';
@@ -645,11 +645,12 @@
       localStorage.setItem(NICKNAME_LOCKED_KEY, 'true');
       nicknameInput.disabled = true;
 
-      sfx.init(); sfx.playClick(); showScreen('game');
+      // [요청 반영] 게임 시작 버튼 클릭 효과음(playClick) 제거 완료
+      sfx.init(); 
+      showScreen('game');
       state.score = 0; state.combo = 0; state.maxCombo = 0; state.timeLeft = GAME_TIME;
       updateHUD(); generateQuestion();
 
-      // [수정사항 반영] 정확한 1초(1000ms) 간격 카운트다운 및 각 단계별 효과음 출력
       let count = 3; 
       countdownText.textContent = count; 
       countdownOverlay.classList.add('active');
@@ -668,7 +669,7 @@
           countdownOverlay.classList.remove('active');
           runGameLoop();
         }
-      }, 1000); // 1초 단위 정확한 타이밍 적용
+      }, 1000);
     }
 
     function runGameLoop() {
@@ -704,11 +705,15 @@
     
     document.getElementById('btn-reset-rank').addEventListener('click', () => { sfx.playClick(); document.getElementById('confirm-reset-modal').classList.add('active'); });
     
-    // [수정사항 반영] 로컬 점수 초기화 + 서버(시트) 데이터 0점 리셋 동기화
+    // [수정 반영] 초기화 시 로컬 점수 리셋 + 서버(시트) 기록 0점 리셋 + 닉네임 잠금 해제 및 입력창 활성화
     document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
       sfx.playClick();
       localStorage.removeItem(STORAGE_KEY);
-      resetRecordOnline(); // 서버 시트 데이터도 0점으로 리셋 요청
+      localStorage.removeItem(NICKNAME_KEY);
+      localStorage.removeItem(NICKNAME_LOCKED_KEY);
+      nicknameInput.value = '';
+      nicknameInput.disabled = false;
+      resetRecordOnline(); // 서버 시트 기록도 0점으로 리셋 요청 전송
       updateLobbyBest();
       document.getElementById('confirm-reset-modal').classList.remove('active');
       document.getElementById('leaderboard-modal').classList.remove('active');
