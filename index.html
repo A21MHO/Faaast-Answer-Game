@@ -69,7 +69,7 @@
     }
     .screen.active { opacity: 1; pointer-events: auto; transform: scale(1); }
 
-    /* 1. 메인 타이틀 화면 (시안 완벽 반영) */
+    /* 메인 타이틀 화면 */
     #title-screen { justify-content: space-between; padding: 0 22px 20px; }
     .flag-wrapper {
       position: absolute; top: 0; left: 0; width: 255px; height: 245px;
@@ -102,7 +102,6 @@
     }
     .lobby-best-badge strong { color: #111827; font-weight: 900; }
 
-    /* 하단 컨트롤 섹션 (닉네임 입력 + 3단 메뉴 버튼) */
     .bottom-controls {
       display: flex; flex-direction: column; gap: 8px;
       margin-top: auto; margin-bottom: 14px; z-index: 2;
@@ -286,7 +285,7 @@
 
       <footer class="footer-bar">
         <span>Made by F9m1is</span>
-        <span>v.1.3.2</span>
+        <span>v.1.3.3</span>
       </footer>
     </section>
 
@@ -394,14 +393,15 @@
   </div>
 
   <script>
-    const JSONBIN_BIN_ID = '6af88774ac6210605a8795f0';
-    const JSONBIN_MASTER_KEY = '$2a$10$WysnhXQIOUh9EaaImSSSruXKgNX3.U9X3CxmPY7cX/lZcdZ34QLE2';
+    // 제공해주신 GAS ID를 반영한 웹 앱 URL
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/1hVhxFJShCQ68h9Vrp5qcdYcYDeIfxH9rOanNjRy3dY7_rRn82LS6s4wm/exec';
 
+    // 사운드 볼륨 대폭 상향 수정 (gain 값을 0.45~0.5로 키움)
     class SoundEngine {
       constructor() { this.ctx = null; this.enabled = true; }
       init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); if (this.ctx.state === 'suspended') this.ctx.resume(); }
       toggle() { this.enabled = !this.enabled; return this.enabled; }
-      playTone(freq, type, duration, delay=0, gain=0.15) {
+      playTone(freq, type, duration, delay=0, gain=0.45) {
         if (!this.enabled) return;
         this.init();
         const now = this.ctx.currentTime + delay;
@@ -412,10 +412,10 @@
         osc.connect(g); g.connect(this.ctx.destination);
         osc.start(now); osc.stop(now + duration);
       }
-      playClick() { this.playTone(520, 'sine', 0.06); }
-      playCorrect(combo) { this.playTone(Math.min(523 + combo * 20, 1046), 'sine', 0.12); }
-      playWrong() { this.playTone(165, 'sawtooth', 0.22); }
-      playGameOver() { this.playTone(440, 'triangle', 0.18); this.playTone(261, 'sawtooth', 0.45, 0.18); }
+      playClick() { this.playTone(580, 'sine', 0.08, 0, 0.4); }
+      playCorrect(combo) { this.playTone(Math.min(523 + combo * 25, 1200), 'sine', 0.15, 0, 0.5); }
+      playWrong() { this.playTone(140, 'sawtooth', 0.28, 0, 0.5); }
+      playGameOver() { this.playTone(440, 'triangle', 0.2, 0, 0.4); this.playTone(220, 'sawtooth', 0.5, 0.2, 0.5); }
     }
     const sfx = new SoundEngine();
 
@@ -445,15 +445,13 @@
       return false;
     }
 
+    // 구글 시트(GAS) 랭킹 불러오기 (GET)
     async function fetchOnlineLeaderboard() {
       const listEl = document.getElementById('rank-list');
       listEl.innerHTML = '<li style="text-align:center; padding:20px; color:#6b7280;">랭킹 불러오는 중...</li>';
       try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-          headers: { 'X-Master-Key': JSONBIN_MASTER_KEY }
-        });
-        const json = await res.json();
-        const data = json.record?.ranking || json.ranking || [];
+        const res = await fetch(GAS_WEB_APP_URL);
+        const data = await res.json();
         if (!Array.isArray(data) || data.length === 0) {
           listEl.innerHTML = '<li style="text-align:center; padding:20px; color:#6b7280;">등록된 온라인 기록이 없습니다.</li>';
           return;
@@ -464,7 +462,7 @@
               <span class="rank-num">${idx + 1}</span>
               <div>
                 <div style="font-weight:900; color:#0f172a;">${escapeHtml(rec.nickname || '익명')}</div>
-                <div style="font-size:0.68rem; color:#6b7280;">최대 ${rec.maxCombo || 0}콤보 · ${rec.date || ''}</div>
+                <div style="font-size:0.68rem; color:#6b7280;">${rec.timestamp ? new Date(rec.timestamp).toLocaleDateString() : ''}</div>
               </div>
             </div>
             <div class="rank-score">${Number(rec.score || 0).toLocaleString()} 점</div>
@@ -475,30 +473,16 @@
       }
     }
 
+    // 구글 시트(GAS) 점수 등록 (POST)
     async function submitScoreOnline(score, maxCombo) {
       if (score <= 0) return;
       const nickname = (nicknameInput.value.trim() || '플레이어').slice(0, 10);
       try {
-        const getRes = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-          headers: { 'X-Master-Key': JSONBIN_MASTER_KEY }
-        });
-        const getJson = await getRes.json();
-        const currentList = getJson.record?.ranking || getJson.ranking || [];
-
-        const now = new Date();
-        const dateStr = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
-        
-        currentList.push({ nickname, score, maxCombo, date: dateStr });
-        currentList.sort((a, b) => b.score - a.score);
-        const top10 = currentList.slice(0, 10);
-
-        await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': JSONBIN_MASTER_KEY
-          },
-          body: JSON.stringify({ ranking: top10 })
+        await fetch(GAS_WEB_APP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nickname, score, maxCombo })
         });
       } catch (e) {
         console.error('온라인 점수 등록 실패', e);
