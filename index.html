@@ -285,7 +285,7 @@
 
       <footer class="footer-bar">
         <span>Made by F9m1is</span>
-        <span>v.1.3.3</span>
+        <span>v.1.3.4</span>
       </footer>
     </section>
 
@@ -393,10 +393,10 @@
   </div>
 
   <script>
-    // 제공해주신 GAS ID를 반영한 웹 앱 URL
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/1hVhxFJShCQ68h9Vrp5qcdYcYDeIfxH9rOanNjRy3dY7_rRn82LS6s4wm/exec';
+    // 유저가 제공한 정확한 GAS 웹 앱 배포 URL 적용 완료
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxS2gt1_fansmYryo3nKVw_JzeXoG12qpyHW5vM2gQXekJRhwNnTIvTqCdD0T1F4lvH/exec';
 
-    // 사운드 볼륨 대폭 상향 수정 (gain 값을 0.45~0.5로 키움)
+    // 효과음 볼륨 짱짱하게 상향 완료 (gain 0.45 ~ 0.5)
     class SoundEngine {
       constructor() { this.ctx = null; this.enabled = true; }
       init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); if (this.ctx.state === 'suspended') this.ctx.resume(); }
@@ -445,7 +445,7 @@
       return false;
     }
 
-    // 구글 시트(GAS) 랭킹 불러오기 (GET)
+    // 구글 시트(GAS) 실시간 랭킹 불러오기 (GET)
     async function fetchOnlineLeaderboard() {
       const listEl = document.getElementById('rank-list');
       listEl.innerHTML = '<li style="text-align:center; padding:20px; color:#6b7280;">랭킹 불러오는 중...</li>';
@@ -473,7 +473,7 @@
       }
     }
 
-    // 구글 시트(GAS) 점수 등록 (POST)
+    // 구글 시트(GAS) 실시간 점수 등록 (POST)
     async function submitScoreOnline(score, maxCombo) {
       if (score <= 0) return;
       const nickname = (nicknameInput.value.trim() || '플레이어').slice(0, 10);
