@@ -1,328 +1,664 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FaaasT Answer</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Jua',sans-serif;user-select:none;}
-body{background-color:#e2e8f0;display:flex;justify-content:center;align-items:center;min-height:100vh;overflow:hidden;}
-.game-container{width:100%;max-width:420px;height:100vh;max-height:850px;background-color:#ffffff;position:relative;box-shadow:0 10px 25px rgba(0,0,0,0.1);display:flex;flex-direction:column;overflow:hidden;}
-@media(min-width:421px){.game-container{border-radius:24px;border:8px solid #cbd5e1;}}
-.screen{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;background:#ffffff;transition:opacity 0.2s ease;z-index:1;}
-.screen.hidden{opacity:0;pointer-events:none;z-index:-1;}
-.main-header{height:180px;position:relative;background:#f8fafc;border-bottom:2px solid #e2e8f0;overflow:hidden;}
-.checker-flag-bg{position:absolute;top:0;left:0;width:180px;height:180px;background-image:linear-gradient(45deg, #000 25%, transparent 25%), linear-gradient(-45deg, #000 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #000 75%), linear-gradient(-45deg, transparent 75%, #000 75%);background-size:30px 30px;background-position:0 0, 0 15px, 15px -15px, -15px 0px;opacity:0.15;border-bottom-right-radius:100px;}
-.title-area{position:absolute;right:20px;top:35px;text-align:right;}
-.title-area h1{font-size:2.8rem;color:#0f172a;line-height:1.1;}
-.title-area h1 span{display:block;font-size:2.4rem;}
-.main-body{flex:1;padding:24px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;}
-.best-score-badge{background:#f1f5f9;padding:8px 18px;border-radius:20px;font-size:1.1rem;color:#334155;box-shadow:inset 0 2px 4px rgba(0,0,0,0.05);}
-.nickname-container{width:100%;max-width:280px;display:flex;flex-direction:column;gap:6px;}
-.nickname-container label{font-size:0.9rem;color:#64748b;padding-left:4px;}
-.nickname-container input{width:100%;padding:12px 16px;border:2px solid #cbd5e1;border-radius:12px;font-size:1.1rem;text-align:center;outline:none;background:#f8fafc;color:#0f172a;transition:border-color 0.2s;}
-.nickname-container input:focus{border-color:#2563eb;background:#fff;}
-.menu-buttons{width:100%;max-width:280px;display:flex;flex-direction:column;gap:12px;}
-.btn{width:100%;padding:14px;border:none;border-radius:14px;font-size:1.2rem;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.05);transition:transform 0.1s, background-color 0.2s;}
-.btn:active{transform:scale(0.97);}
-.btn-primary{background-color:#2563eb;color:white;}
-.btn-primary:hover{background-color:#1d4ed8;}
-.btn-secondary{background-color:#334155;color:white;}
-.btn-secondary:hover{background-color:#1e293b;}
-.footer-info{height:50px;background:#0f172a;color:#94a3b8;display:flex;justify-content:space-between;align-items:center;padding:0 20px;font-size:0.9rem;}
-.game-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;background:#f8fafc;border-bottom:2px solid #e2e8f0;}
-.stat-box{font-size:1.1rem;color:#334155;}
-.timer-bar-container{width:100%;height:10px;background:#e2e8f0;position:relative;}
-.timer-bar{height:100%;background:#22c55e;width:100%;transition:width 0.1s linear, background-color 0.3s;}
-.quiz-body{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;}
-.question-display{font-size:3.5rem;color:#0f172a;margin-bottom:40px;letter-spacing:2px;}
-.choices-container{width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;}
-.choice-btn{padding:18px;font-size:1.5rem;background:#ffffff;border:3px solid #cbd5e1;border-radius:16px;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.05);transition:all 0.1s;}
-.choice-btn:hover{border-color:#2563eb;background:#eff6ff;}
-.modal{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:10;opacity:0;pointer-events:none;transition:opacity 0.2s;}
-.modal.active{opacity:1;pointer-events:auto;}
-.modal-content{width:85%;max-width:340px;background:#ffffff;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:16px;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1);max-height:80vh;}
-.modal-header{display:flex;justify-content:space-between;align-items:center;font-size:1.3rem;color:#0f172a;border-bottom:2px solid #f1f5f9;padding-bottom:10px;}
-.close-modal{background:none;border:none;font-size:1.5rem;cursor:pointer;color:#64748b;}
-.rank-list{list-style:none;overflow-y:auto;max-height:250px;display:flex;flex-direction:column;gap:8px;}
-.rank-item{display:flex;justify-content:space-between;padding:10px 14px;background:#f8fafc;border-radius:10px;font-size:1.05rem;color:#334155;}
-@keyframes shake{0%{transform:translate(0,0);}20%{transform:translate(-8px,0);}40%{transform:translate(8px,0);}60%{transform:translate(-6px,0);}80%{transform:translate(6px,0);}100%{transform:translate(0,0);}}
-.shake{animation:shake 0.3s ease;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FaaasT Answer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700;900&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #27639c;
+      --primary-blue-light: #3276b7;
+      --primary-blue-dark: #194570;
+      --footer-navy: #143f6b;
+      --bg-outer: #d7dce3;
+      --card-bg: #ffffff;
+      --text-dark: #111827;
+      --text-muted: #6b7280;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: var(--bg-outer);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 16px 12px;
+      overflow: hidden;
+    }
+    #app-frame {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      height: calc(100vh - 32px);
+      height: calc(100dvh - 32px);
+      max-height: 780px;
+      min-height: 580px;
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 20px 45px rgba(14, 56, 92, 0.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-9px) rotate(-0.7deg); }
+      40% { transform: translateX(9px) rotate(0.7deg); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+    .shake { animation: shake 0.32s cubic-bezier(.36,.07,.19,.97) both; }
+
+    #flash-overlay {
+      position: absolute; inset: 0; pointer-events: none; z-index: 40;
+      opacity: 0; transition: opacity 0.18s ease-out;
+    }
+    #flash-overlay.flash-correct { background: rgba(16, 185, 129, 0.22); opacity: 1; }
+    #flash-overlay.flash-wrong { background: rgba(239, 68, 68, 0.28); opacity: 1; }
+
+    .screen {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease;
+      transform: scale(0.98); padding: 20px;
+    }
+    .screen.active { opacity: 1; pointer-events: auto; transform: scale(1); }
+
+    /* 1. 메인 타이틀 화면 (시안 완벽 반영) */
+    #title-screen { justify-content: space-between; padding: 0 22px 20px; }
+    .flag-wrapper {
+      position: absolute; top: 0; left: 0; width: 255px; height: 245px;
+      pointer-events: none; z-index: 1; transform-origin: top left;
+      animation: flagWave 3s ease-in-out infinite alternate;
+    }
+    @keyframes flagWave {
+      0% { transform: skewY(0deg) scale(1); }
+      50% { transform: skewY(-1.5deg) scale(1.012, 0.992); }
+      100% { transform: skewY(1deg) scale(0.996, 1.008); }
+    }
+
+    .title-header { position: relative; z-index: 2; margin-top: 125px; text-align: right; padding-right: 12px; }
+    .game-title {
+      font-family: 'Patrick Hand', cursive; font-size: 3.35rem; line-height: 0.95;
+      color: #090d16; letter-spacing: 0.5px;
+    }
+    .game-title span { display: block; }
+
+    .title-divider {
+      width: 100%; height: 2.5px; background-color: #111827;
+      border-radius: 2px; margin-top: 20px;
+    }
+
+    .lobby-best-wrap { display: flex; justify-content: center; align-items: center; margin-top: 14px; z-index: 2; }
+    .lobby-best-badge {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: #e5e7eb; padding: 6px 26px; border-radius: 999px;
+      font-size: 0.85rem; font-weight: 700; color: #1f2937;
+    }
+    .lobby-best-badge strong { color: #111827; font-weight: 900; }
+
+    /* 하단 컨트롤 섹션 (닉네임 입력 + 3단 메뉴 버튼) */
+    .bottom-controls {
+      display: flex; flex-direction: column; gap: 8px;
+      margin-top: auto; margin-bottom: 14px; z-index: 2;
+    }
+    .lobby-nickname-wrap { display: flex; justify-content: flex-start; margin-bottom: 2px; }
+    .lobby-nickname-input {
+      width: 52%; min-width: 165px; padding: 7px 11px;
+      border: 1.5px solid #cbd5e1; border-radius: 6px;
+      font-size: 0.82rem; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+      outline: none; background: #ffffff; color: #111827;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .lobby-nickname-input::placeholder { color: #9ca3af; font-weight: 500; }
+    .lobby-nickname-input:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(39, 99, 156, 0.15);
+    }
+
+    .interactive-btn {
+      position: relative; overflow: hidden; cursor: pointer;
+      transition: transform 0.13s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.15s ease;
+    }
+    .interactive-btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    .interactive-btn:active { transform: translateY(2.5px) scale(0.985); filter: brightness(0.94); }
+
+    .arcade-btn {
+      width: 100%; padding: 12px 20px; border: none; border-radius: 8px;
+      background: var(--primary-blue);
+      color: #ffffff; font-family: 'Noto Sans KR', sans-serif; font-size: 1.15rem; font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 3px 0 var(--primary-blue-dark);
+    }
+    .arcade-btn.secondary { background: #334155; box-shadow: 0 3px 0 #1e293b; }
+
+    .footer-bar {
+      background-color: var(--footer-navy); color: #ffffff; border-radius: 8px;
+      padding: 8px 14px; display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.85rem; font-weight: 700;
+    }
+
+    /* 카운트다운 & 본게임 & 오버 */
+    #countdown-overlay {
+      position: absolute; inset: 0; background: rgba(255, 255, 255, 0.95);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      z-index: 30; opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
+    }
+    #countdown-overlay.active { opacity: 1; pointer-events: auto; }
+    #countdown-text { font-family: 'Patrick Hand', cursive; font-size: 6.5rem; color: var(--primary-blue); }
+    #countdown-sub { font-size: 0.95rem; font-weight: 700; color: var(--text-muted); margin-top: -10px; }
+
+    #game-screen { justify-content: space-between; padding: 18px 20px 22px; background: #f8fafc; }
+    .game-hud { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .hud-stats { display: flex; gap: 8px; flex: 1; }
+    .stat-box { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 7px 10px; flex: 1; text-align: center; }
+    .stat-label { font-size: 0.68rem; font-weight: 900; color: var(--text-muted); letter-spacing: 0.5px; }
+    .stat-value { font-size: 1.25rem; font-weight: 900; color: var(--text-dark); }
+    .stat-value.best { color: var(--primary-blue); }
+    .sound-btn { width: 44px; height: 48px; border-radius: 10px; border: 1.5px solid #e2e8f0; background: #fff; font-size: 1.25rem; }
+
+    .timer-section { margin-top: 12px; }
+    .timer-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem; font-weight: 900; color: #334155; }
+    .timer-track { width: 100%; height: 14px; background-color: #e2e8f0; border-radius: 999px; overflow: hidden; }
+    #timer-fill { width: 100%; height: 100%; background: linear-gradient(90deg, var(--primary-blue), #3b82f6); border-radius: 999px; transition: width 0.05s linear; }
+    #timer-fill.danger { background: linear-gradient(90deg, #dc2626, #f87171); }
+
+    .question-card {
+      flex: 1; margin: 14px 0; background: #fff; border: 2.5px solid #1e293b; border-radius: 18px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative;
+      box-shadow: 0 6px 0 #1e293b;
+    }
+    .question-hint { position: absolute; top: 14px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }
+    #question-text { font-family: 'Patrick Hand', sans-serif; font-size: 4.4rem; font-weight: 700; color: #0f172a; letter-spacing: 2px; }
+
+    .choices-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .choice-btn {
+      position: relative; height: 88px; border: none; border-radius: 14px;
+      background: linear-gradient(180deg, var(--primary-blue-light) 0%, var(--primary-blue) 100%);
+      color: #fff; font-family: 'Patrick Hand', sans-serif; font-size: 2.3rem; font-weight: 700;
+      box-shadow: 0 5px 0 var(--primary-blue-dark); display: flex; flex-direction: column; justify-content: center; align-items: center;
+    }
+    .choice-btn.correct-flash { background: #059669; box-shadow: 0 5px 0 #065f46; }
+    .choice-btn.wrong-flash { background: #dc2626; box-shadow: 0 5px 0 #991b1b; }
+    .key-badge { position: absolute; top: 6px; left: 8px; font-family: 'Noto Sans KR'; font-size: 0.65rem; font-weight: 700; background: rgba(255,255,255,0.22); padding: 1px 5px; border-radius: 4px; }
+
+    /* 게임 오버 화면 */
+    #gameover-screen { justify-content: space-between; align-items: center; text-align: center; padding: 26px 22px; }
+    .gameover-title { font-family: 'Patrick Hand', cursive; font-size: 3.2rem; color: #0f172a; }
+    .result-card { position: relative; width: 100%; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 16px; padding: 22px 16px; margin: 10px 0; }
+    #new-record-badge { display: none; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #f59e0b; color: #fff; font-size: 0.78rem; font-weight: 900; padding: 4px 14px; border-radius: 999px; white-space: nowrap; }
+    #new-record-badge.show { display: inline-flex; }
+    .final-score-val { font-size: 3rem; font-weight: 900; color: var(--primary-blue); margin: 4px 0 12px; }
+    .result-sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-top: 1.5px solid #e2e8f0; padding-top: 12px; }
+    .result-sub-item { background: #fff; padding: 10px; border-radius: 10px; border: 1px solid #e2e8f0; }
+    .result-sub-item span { display: block; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-bottom: 2px; }
+    .result-sub-item strong { font-size: 1.05rem; font-weight: 900; color: #0f172a; }
+    .gameover-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+
+    /* 모달 공통 */
+    .modal-backdrop {
+      position: absolute; inset: 0; background: rgba(15, 23, 42, 0.55);
+      display: flex; justify-content: center; align-items: center; padding: 20px; z-index: 50;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
+    }
+    .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+    .modal-box { width: 100%; max-width: 350px; background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 35px rgba(0,0,0,0.25); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px; }
+    .modal-title { font-size: 1.15rem; font-weight: 900; color: var(--footer-navy); }
+    .modal-close { background: #f1f5f9; border: none; width: 28px; height: 28px; border-radius: 8px; font-weight: 900; color: #475569; cursor: pointer; }
+
+    .rank-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 230px; overflow-y: auto; }
+    .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #f8fafc; border-radius: 8px; font-size: 0.88rem; font-weight: 700; }
+    .rank-item.top-1 { background: #fef3c7; border: 1.5px solid #f59e0b; }
+    .rank-left { display: flex; align-items: center; gap: 8px; }
+    .rank-num { width: 22px; height: 22px; border-radius: 6px; background: var(--primary-blue); color: #fff; font-size: 0.75rem; display: flex; justify-content: center; align-items: center; }
+    .rank-score { font-weight: 900; color: var(--primary-blue); }
+    .modal-footer-btns { display: flex; gap: 8px; }
+    .btn-small { flex: 1; padding: 10px; border: none; border-radius: 10px; font-weight: 700; font-size: 0.9rem; background: var(--primary-blue); color: #fff; box-shadow: 0 3px 0 var(--primary-blue-dark); cursor: pointer; }
+    .btn-small.danger { background: #fee2e2; color: #dc2626; box-shadow: 0 3px 0 #fca5a5; }
+
+    .tutorial-content { font-size: 0.9rem; color: #334155; line-height: 1.55; margin-bottom: 16px; }
+    .tutorial-content p { margin-bottom: 8px; }
+  </style>
 </head>
 <body>
-<div class="game-container" id="gameContainer">
-<div id="mainScreen" class="screen">
-<div class="main-header">
-<div class="checker-flag-bg"></div>
-<div class="title-area">
-<h1>FaaasT<span>AnsweR</span></h1>
-</div>
-</div>
-<div class="main-body">
-<div class="best-score-badge">
-🏆 내 최고 기록: <span id="bestScoreDisplay">0</span> 점
-</div>
-<div class="nickname-container">
-<label for="nicknameInput">닉네임</label>
-<input type="text" id="nicknameInput" value="플레이어" maxlength="10" placeholder="닉네임 입력">
-</div>
-<div class="menu-buttons">
-<button class="btn btn-primary" id="startBtn">게임 시작</button>
-<button class="btn btn-secondary" id="tutorialBtn">튜토리얼</button>
-<button class="btn btn-secondary" id="rankBtn">온라인 순위표</button>
-</div>
-</div>
-<div class="footer-info">
-<span>Made by F9m1is</span>
-<span>v.1.3.2</span>
-</div>
-</div>
-<div id="gameScreen" class="screen hidden">
-<div class="game-header">
-<div class="stat-box">점수: <span id="currentScore">0</span></div>
-<div class="stat-box">🔥 <span id="currentCombo">0</span>콤보</div>
-<button class="btn-secondary" id="soundToggleBtn" style="padding:4px 10px; font-size:0.9rem; border-radius:8px;">🔊 음소거</button>
-</div>
-<div class="timer-bar-container">
-<div class="timer-bar" id="timerBar"></div>
-</div>
-<div class="quiz-body" id="quizBody">
-<div class="question-display" id="questionText">3 + 5</div>
-<div class="choices-container">
-<button class="choice-btn" data-index="0">8</button>
-<button class="choice-btn" data-index="1">7</button>
-<button class="choice-btn" data-index="2">9</button>
-</div>
-</div>
-</div>
-<div id="gameOverScreen" class="screen hidden">
-<div class="main-body" style="text-align: center;">
-<h2 style="font-size: 2.2rem; color: #0f172a; margin-bottom: 10px;">게임 종료!</h2>
-<p style="font-size: 1.2rem; color: #64748b; margin-bottom: 20px;" id="finalResultText">점수: 0점</p>
-<div class="menu-buttons">
-<button class="btn btn-primary" id="restartBtn">다시 하기</button>
-<button class="btn btn-secondary" id="goHomeBtn">메인으로</button>
-</div>
-</div>
-</div>
-<div class="modal" id="tutorialModal">
-<div class="modal-content">
-<div class="modal-header">
-<span>📖 튜토리얼 규칙</span>
-<button class="close-modal" id="closeTutorial">&times;</button>
-</div>
-<p style="color: #475569; line-height: 1.6;">
-1. 1부터 9까지의 한 자리 수 사칙연산 문제를 제한 시간 내에 푸세요.<br>
-2. 연속 정답 시 콤보가 쌓이며, 5콤보 달성 시 <strong>제한 시간 +1.5초</strong> 보너스가 주어집니다.<br>
-3. 오답을 누르면 <strong>시간 -2.0초</strong> 페널티와 함께 콤보가 초기화됩니다!<br>
-4. 숫자키(1, 2, 3)나 방향키로도 빠르게 답변할 수 있습니다.
-</p>
-<button class="btn btn-primary" id="tutorialOkBtn">확인</button>
-</div>
-</div>
-<div class="modal" id="rankModal">
-<div class="modal-content">
-<div class="modal-header">
-<span>🌍 온라인 순위표 (TOP 10)</span>
-<button class="close-modal" id="closeRank">&times;</button>
-</div>
-<ul class="rank-list" id="rankList">
-<li class="rank-item" style="text-align: center; justify-content: center;">불러오는 중...</li>
-</ul>
-<button class="btn btn-primary" id="rankOkBtn">닫기</button>
-</div>
-</div>
-</div>
-<script>
-const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx6gOtjldFjXi3HL-3DDMCcKDCXlUd_Psav7mNdHVpXdQGhvFUEjpOzXeLNLVdSQFzP/exec";
-let score = 0;
-let combo = 0;
-let bestScore = localStorage.getItem('faaasT_bestScore') || 0;
-let timer = 10.0;
-let maxTime = 10.0;
-let timerInterval = null;
-let currentAnswer = 0;
-let isSoundOn = true;
-document.getElementById('bestScoreDisplay').innerText = bestScore;
-function showScreen(screenId) {
-document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-document.getElementById(screenId).classList.remove('hidden');
-}
-let audioCtx = null;
-function playSound(type) {
-if (!isSoundOn) return;
-if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-let osc = audioCtx.createOscillator();
-let gain = audioCtx.createGain();
-osc.connect(gain);
-gain.connect(audioCtx.destination);
-if (type === 'correct') {
-osc.frequency.setValueAtTime(400 + (combo * 30), audioCtx.currentTime);
-gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
-osc.start();
-osc.stop(audioCtx.currentTime + 0.15);
-} else if (type === 'wrong') {
-osc.type = 'sawtooth';
-osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
-osc.start();
-osc.stop(audioCtx.currentTime + 0.25);
-}
-}
-document.getElementById('startBtn').addEventListener('click', startGame);
-document.getElementById('tutorialBtn').addEventListener('click', () => document.getElementById('tutorialModal').classList.add('active'));
-document.getElementById('closeTutorial').addEventListener('click', () => document.getElementById('tutorialModal').classList.remove('active'));
-document.getElementById('tutorialOkBtn').addEventListener('click', () => document.getElementById('tutorialModal').classList.remove('active'));
-document.getElementById('rankBtn').addEventListener('click', () => {
-fetchRankings();
-document.getElementById('rankModal').classList.add('active');
-});
-document.getElementById('closeRank').addEventListener('click', () => document.getElementById('rankModal').classList.remove('active'));
-document.getElementById('rankOkBtn').addEventListener('click', () => document.getElementById('rankModal').classList.remove('active'));
-document.getElementById('restartBtn').addEventListener('click', startGame);
-document.getElementById('goHomeBtn').addEventListener('click', () => showScreen('mainScreen'));
-document.getElementById('soundToggleBtn').addEventListener('click', () => {
-isSoundOn = !isSoundOn;
-document.getElementById('soundToggleBtn').innerText = isSoundOn ? "🔊 음소거" : "🔇 무음";
-});
-function startGame() {
-score = 0;
-combo = 0;
-timer = 10.0;
-maxTime = 10.0;
-document.getElementById('currentScore').innerText = score;
-document.getElementById('currentCombo').innerText = combo;
-showScreen('gameScreen');
-nextQuestion();
-if (timerInterval) clearInterval(timerInterval);
-timerInterval = setInterval(updateTimer, 100);
-}
-function nextQuestion() {
-const ops = ['+', '-', '×', '÷'];
-const op = ops[Math.floor(Math.random() * ops.length)];
-let num1, num2;
-if (op === '+') {
-num1 = Math.floor(Math.random() * 9) + 1;
-num2 = Math.floor(Math.random() * 9) + 1;
-currentAnswer = num1 + num2;
-} else if (op === '-') {
-num1 = Math.floor(Math.random() * 9) + 1;
-num2 = Math.floor(Math.random() * 9) + 1;
-if (num1 < num2) [num1, num2] = [num2, num1];
-currentAnswer = num1 - num2;
-} else if (op === '×') {
-num1 = Math.floor(Math.random() * 9) + 1;
-num2 = Math.floor(Math.random() * 9) + 1;
-currentAnswer = num1 * num2;
-} else {
-num2 = Math.floor(Math.random() * 8) + 2;
-let quotient = Math.floor(Math.random() * 8) + 1;
-num1 = num2 * quotient;
-currentAnswer = quotient;
-}
-document.getElementById('questionText').innerText = `${num1} ${op} ${num2}`;
-let choices = [currentAnswer];
-while (choices.length < 3) {
-let wrong = currentAnswer + (Math.floor(Math.random() * 6) - 3);
-if (wrong >= 0 && !choices.includes(wrong)) {
-choices.push(wrong);
-}
-}
-choices.sort(() => Math.random() - 0.5);
-const choiceBtns = document.querySelectorAll('.choice-btn');
-choiceBtns.forEach((btn, idx) => {
-btn.innerText = choices[idx];
-btn.onclick = () => checkAnswer(choices[idx]);
-});
-}
-function checkAnswer(selected) {
-if (selected === currentAnswer) {
-playSound('correct');
-score += 100 + (combo * 10);
-combo++;
-if (combo % 5 === 0) {
-timer = Math.min(maxTime, timer + 1.5);
-}
-document.getElementById('currentScore').innerText = score;
-document.getElementById('currentCombo').innerText = combo;
-nextQuestion();
-} else {
-playSound('wrong');
-combo = 0;
-document.getElementById('currentCombo').innerText = combo;
-timer = Math.max(0, timer - 2.0);
-const quizBody = document.getElementById('quizBody');
-quizBody.classList.add('shake');
-setTimeout(() => quizBody.classList.remove('shake'), 300);
-}
-}
-function updateTimer() {
-timer -= 0.1;
-if (timer < 0) timer = 0;
-let percentage = (timer / maxTime) * 100;
-document.getElementById('timerBar').style.width = percentage + '%';
-if (timer <= 0) {
-clearInterval(timerInterval);
-endGame();
-}
-}
-function endGame() {
-showScreen('gameOverScreen');
-document.getElementById('finalResultText').innerText = `최종 점수: ${score} 점`;
-if (score > bestScore) {
-bestScore = score;
-localStorage.setItem('faaasT_bestScore', bestScore);
-document.getElementById('bestScoreDisplay').innerText = bestScore;
-}
-sendScoreToGAS();
-}
-function sendScoreToGAS() {
-if (!GAS_WEB_APP_URL.includes("script.google.com")) return;
-const nickname = document.getElementById('nicknameInput').value.trim() || "플레이어";
-fetch(GAS_WEB_APP_URL, {
-method: "POST",
-mode: "no-cors",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ nickname: nickname, score: score })
-}).catch(err => console.log("전송 실패:", err));
-}
-function fetchRankings() {
-const rankList = document.getElementById('rankList');
-rankList.innerHTML = `<li class="rank-item" style="text-align: center; justify-content: center;">불러오는 중...</li>`;
-if (!GAS_WEB_APP_URL.includes("script.google.com")) {
-rankList.innerHTML = `<li class="rank-item" style="text-align: center; justify-content: center; color: #ef4444;">GAS 웹앱 URL이 설정되지 않았습니다!</li>`;
-return;
-}
-fetch(GAS_WEB_APP_URL)
-.then(res => res.json())
-.then(data => {
-rankList.innerHTML = "";
-if (!data || data.length === 0) {
-rankList.innerHTML = `<li class="rank-item" style="text-align: center; justify-content: center;">등록된 온라인 기록이 없습니다.</li>`;
-return;
-}
-data.forEach((item, index) => {
-let li = document.createElement('li');
-li.className = 'rank-item';
-li.innerHTML = `<span><strong>${index + 1}위</strong> ${item.nickname}</span> <span>${item.score}점</span>`;
-rankList.appendChild(li);
-});
-})
-.catch(err => {
-rankList.innerHTML = `<link rel="stylesheet"... class="rank-item" style="text-align: center; justify-content: center; color: #ef4444;">순위를 불러오지 못했습니다.</li>`;
-});
-}
-window.addEventListener('keydown', (e) => {
-if (document.getElementById('gameScreen').classList.contains('hidden')) return;
-const choiceBtns = document.querySelectorAll('.choice-btn');
-if (e.key === '1' && choiceBtns[0]) choiceBtns[0].click();
-if (e.key === '2' && choiceBtns[1]) choiceBtns[1].click();
-if (e.key === '3' && choiceBtns[2]) choiceBtns[2].click();
-});
-</script>
+  <div id="app-frame">
+    <div id="flash-overlay"></div>
+
+    <!-- 메인 타이틀 화면 -->
+    <section id="title-screen" class="screen active">
+      <div class="flag-wrapper">
+        <svg viewBox="0 0 255 245" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="flag-clip">
+              <path d="M 0,0 L 218,0 C 185,84 115,152 0,185 Z" />
+            </clipPath>
+            <linearGradient id="wave-shadow" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#000000" stop-opacity="0.22" />
+              <stop offset="32%" stop-color="#ffffff" stop-opacity="0.18" />
+              <stop offset="65%" stop-color="#000000" stop-opacity="0.28" />
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0.12" />
+            </linearGradient>
+          </defs>
+          <g clip-path="url(#flag-clip)">
+            <rect x="0" y="0" width="240" height="210" fill="#f3f4f6" />
+            <g transform="rotate(-19 85 75)">
+              <rect x="-40" y="-40" width="42" height="42" fill="#090d16" />
+              <rect x="44" y="-40" width="42" height="42" fill="#090d16" />
+              <rect x="128" y="-40" width="42" height="42" fill="#090d16" />
+              <rect x="2" y="2" width="42" height="42" fill="#090d16" />
+              <rect x="86" y="2" width="42" height="42" fill="#090d16" />
+              <rect x="170" y="2" width="42" height="42" fill="#090d16" />
+              <rect x="-40" y="44" width="42" height="42" fill="#090d16" />
+              <rect x="44" y="44" width="42" height="42" fill="#090d16" />
+              <rect x="128" y="44" width="42" height="42" fill="#090d16" />
+              <rect x="2" y="86" width="42" height="42" fill="#090d16" />
+              <rect x="86" y="86" width="42" height="42" fill="#090d16" />
+              <rect x="-40" y="128" width="42" height="42" fill="#090d16" />
+              <rect x="44" y="128" width="42" height="42" fill="#090d16" />
+            </g>
+            <rect x="0" y="0" width="240" height="210" fill="url(#wave-shadow)" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="title-header">
+        <h1 class="game-title"><span>FaaasT</span><span>AnsweR</span></h1>
+        <div class="title-divider"></div>
+        <div class="lobby-best-wrap">
+          <div class="lobby-best-badge">🏆 내 최고 기록 : <strong id="lobby-best-score">0</strong></div>
+        </div>
+      </div>
+
+      <div class="bottom-controls">
+        <div class="lobby-nickname-wrap">
+          <input type="text" id="nickname-input" class="lobby-nickname-input" maxlength="10" placeholder="플레이어 닉네임 입력">
+        </div>
+        <button id="btn-start" class="arcade-btn interactive-btn">게임 시작</button>
+        <button id="btn-tutorial" class="arcade-btn interactive-btn">튜토리얼</button>
+        <button id="btn-leaderboard" class="arcade-btn interactive-btn">순위표</button>
+      </div>
+
+      <footer class="footer-bar">
+        <span>Made by F9m1is</span>
+        <span>v.1.3.2</span>
+      </footer>
+    </section>
+
+    <!-- 3초 카운트다운 -->
+    <div id="countdown-overlay">
+      <div id="countdown-text">3</div>
+      <div id="countdown-sub">준비하세요!</div>
+    </div>
+
+    <!-- 본게임 화면 -->
+    <section id="game-screen" class="screen">
+      <div>
+        <div class="game-hud">
+          <div class="hud-stats">
+            <div class="stat-box"><div class="stat-label">SCORE</div><div id="hud-score" class="stat-value">0</div></div>
+            <div class="stat-box"><div class="stat-label">BEST</div><div id="hud-best" class="stat-value best">0</div></div>
+            <div class="stat-box"><div class="stat-label">COMBO</div><div id="hud-combo" class="stat-value">0</div></div>
+          </div>
+          <button id="btn-sound" class="sound-btn interactive-btn">🔊</button>
+        </div>
+        <div class="timer-section">
+          <div class="timer-header"><span>TIME LEFT</span><span id="timer-text">30.0s</span></div>
+          <div class="timer-track"><div id="timer-fill"></div></div>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <span class="question-hint">빠르게 정답을 선택하세요!</span>
+        <div id="question-text">7 × 8</div>
+      </div>
+
+      <div class="choices-grid">
+        <button class="choice-btn interactive-btn" data-index="0"><span class="key-badge">1 / ←</span><span class="choice-val">54</span></button>
+        <button class="choice-btn interactive-btn" data-index="1"><span class="key-badge">2 / ↓</span><span class="choice-val">56</span></button>
+        <button class="choice-btn interactive-btn" data-index="2"><span class="key-badge">3 / →</span><span class="choice-val">64</span></button>
+      </div>
+    </section>
+
+    <!-- 게임 오버 화면 -->
+    <section id="gameover-screen" class="screen">
+      <div>
+        <span style="color:#dc2626; font-weight:900; font-size:0.85rem;">TIME OVER</span>
+        <h2 class="gameover-title">Game Over!</h2>
+      </div>
+      <div class="result-card">
+        <div id="new-record-badge">🎉 개인 최고 기록 갱신!</div>
+        <div style="font-size:0.85rem; font-weight:700; color:var(--text-muted);">최종 점수</div>
+        <div id="final-score" class="final-score-val">0</div>
+        <div class="result-sub-grid">
+          <div class="result-sub-item"><span>내 최고 (BEST)</span><strong id="gameover-best">0</strong></div>
+          <div class="result-sub-item"><span>최대 콤보</span><strong id="gameover-max-combo">0</strong></div>
+        </div>
+      </div>
+      <div class="gameover-actions">
+        <button id="btn-retry" class="arcade-btn interactive-btn">다시 하기</button>
+        <button id="btn-home" class="arcade-btn secondary interactive-btn">메인으로</button>
+      </div>
+    </section>
+
+    <!-- 튜토리얼 모달 -->
+    <div id="tutorial-modal" class="modal-backdrop">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="modal-title">📖 게임 튜토리얼</h3>
+          <button class="modal-close interactive-btn" data-close="tutorial-modal">✕</button>
+        </div>
+        <div class="tutorial-content">
+          <p>⚡ <b>제한 시간 30초</b> 동안 빠르게 사칙연산 문제를 풀어 고득점을 달성하세요!</p>
+          <p>🔥 <b>콤보 시스템</b>: 정답을 맞히면 콤보와 점수가 올라갑니다. 5콤보 달성 시 제한 시간이 <b>+1.5초 회복</b>됩니다!</p>
+          <p>❌ <b>오답 페널티</b>: 틀리면 제한 시간이 <b>-2.0초 감소</b>하고 콤보가 초기화됩니다.</p>
+          <p>⌨️ 화면 버튼 터치 외에도 키보드 <b>[1, 2, 3]</b> 또는 <b>[←, ↓, →]</b> 방향키로 빠르게 입력할 수 있습니다.</p>
+        </div>
+        <div class="modal-footer-btns">
+          <button class="btn-small interactive-btn" data-close="tutorial-modal">확인</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 순위표 모달 -->
+    <div id="leaderboard-modal" class="modal-backdrop">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="modal-title">🌍 온라인 순위표 (TOP 10)</h3>
+          <button class="modal-close interactive-btn" data-close="leaderboard-modal">✕</button>
+        </div>
+        <ul id="rank-list" class="rank-list"><li style="text-align:center; padding:20px; color:#6b7280;">랭킹 불러오는 중...</li></ul>
+        <div class="modal-footer-btns">
+          <button id="btn-reset-rank" class="btn-small danger interactive-btn">내 기록만 초기화</button>
+          <button class="btn-small interactive-btn" data-close="leaderboard-modal">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 초기화 재확인 모달 -->
+    <div id="confirm-reset-modal" class="modal-backdrop">
+      <div class="modal-box">
+        <div class="modal-header"><h3 class="modal-title">⚠️ 초기화 확인</h3><button class="modal-close interactive-btn" data-close="confirm-reset-modal">✕</button></div>
+        <p style="font-size:0.9rem; color:#334155; text-align:center; margin-bottom:16px;">내 기기에 저장된 개인 최고 기록만 삭제됩니다.<br><b>정말 초기화하시겠습니까?</b></p>
+        <div class="modal-footer-btns">
+          <button class="btn-small interactive-btn" style="background:#64748b;" data-close="confirm-reset-modal">취소</button>
+          <button id="btn-confirm-reset-yes" class="btn-small danger interactive-btn">초기화</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const JSONBIN_BIN_ID = '6af88774ac6210605a8795f0';
+    const JSONBIN_MASTER_KEY = '$2a$10$WysnhXQIOUh9EaaImSSSruXKgNX3.U9X3CxmPY7cX/lZcdZ34QLE2';
+
+    class SoundEngine {
+      constructor() { this.ctx = null; this.enabled = true; }
+      init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); if (this.ctx.state === 'suspended') this.ctx.resume(); }
+      toggle() { this.enabled = !this.enabled; return this.enabled; }
+      playTone(freq, type, duration, delay=0, gain=0.15) {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime + delay;
+        const osc = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        osc.type = type; osc.frequency.setValueAtTime(freq, now);
+        g.gain.setValueAtTime(gain, now); g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        osc.connect(g); g.connect(this.ctx.destination);
+        osc.start(now); osc.stop(now + duration);
+      }
+      playClick() { this.playTone(520, 'sine', 0.06); }
+      playCorrect(combo) { this.playTone(Math.min(523 + combo * 20, 1046), 'sine', 0.12); }
+      playWrong() { this.playTone(165, 'sawtooth', 0.22); }
+      playGameOver() { this.playTone(440, 'triangle', 0.18); this.playTone(261, 'sawtooth', 0.45, 0.18); }
+    }
+    const sfx = new SoundEngine();
+
+    const STORAGE_KEY = 'faaast_answer_my_record';
+    const NICKNAME_KEY = 'faaast_answer_nickname';
+
+    const nicknameInput = document.getElementById('nickname-input');
+    const savedNick = localStorage.getItem(NICKNAME_KEY);
+    if (savedNick) nicknameInput.value = savedNick;
+    nicknameInput.addEventListener('input', () => {
+      localStorage.setItem(NICKNAME_KEY, nicknameInput.value.trim());
+    });
+
+    function getMyRecord() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : { score: 0, maxCombo: 0 };
+      } catch (e) { return { score: 0, maxCombo: 0 }; }
+    }
+
+    function saveMyRecord(score, maxCombo) {
+      const current = getMyRecord();
+      if (score > current.score) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ score, maxCombo }));
+        return true;
+      }
+      return false;
+    }
+
+    async function fetchOnlineLeaderboard() {
+      const listEl = document.getElementById('rank-list');
+      listEl.innerHTML = '<li style="text-align:center; padding:20px; color:#6b7280;">랭킹 불러오는 중...</li>';
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+          headers: { 'X-Master-Key': JSONBIN_MASTER_KEY }
+        });
+        const json = await res.json();
+        const data = json.record?.ranking || json.ranking || [];
+        if (!Array.isArray(data) || data.length === 0) {
+          listEl.innerHTML = '<li style="text-align:center; padding:20px; color:#6b7280;">등록된 온라인 기록이 없습니다.</li>';
+          return;
+        }
+        listEl.innerHTML = data.map((rec, idx) => `
+          <li class="rank-item ${idx === 0 ? 'top-1' : ''}">
+            <div class="rank-left">
+              <span class="rank-num">${idx + 1}</span>
+              <div>
+                <div style="font-weight:900; color:#0f172a;">${escapeHtml(rec.nickname || '익명')}</div>
+                <div style="font-size:0.68rem; color:#6b7280;">최대 ${rec.maxCombo || 0}콤보 · ${rec.date || ''}</div>
+              </div>
+            </div>
+            <div class="rank-score">${Number(rec.score || 0).toLocaleString()} 점</div>
+          </li>
+        `).join('');
+      } catch (e) {
+        listEl.innerHTML = '<li style="text-align:center; padding:20px; color:#ef4444;">랭킹을 불러오지 못했습니다.</li>';
+      }
+    }
+
+    async function submitScoreOnline(score, maxCombo) {
+      if (score <= 0) return;
+      const nickname = (nicknameInput.value.trim() || '플레이어').slice(0, 10);
+      try {
+        const getRes = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+          headers: { 'X-Master-Key': JSONBIN_MASTER_KEY }
+        });
+        const getJson = await getRes.json();
+        const currentList = getJson.record?.ranking || getJson.ranking || [];
+
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+        
+        currentList.push({ nickname, score, maxCombo, date: dateStr });
+        currentList.sort((a, b) => b.score - a.score);
+        const top10 = currentList.slice(0, 10);
+
+        await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': JSONBIN_MASTER_KEY
+          },
+          body: JSON.stringify({ ranking: top10 })
+        });
+      } catch (e) {
+        console.error('온라인 점수 등록 실패', e);
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+    }
+
+    const GAME_TIME = 30.0;
+    let state = { isPlaying: false, score: 0, combo: 0, maxCombo: 0, timeLeft: GAME_TIME, currentAnswer: 0, choices: [], timerInterval: null, lastTimestamp: 0 };
+    const appFrame = document.getElementById('app-frame');
+    const flashOverlay = document.getElementById('flash-overlay');
+    const screens = { title: document.getElementById('title-screen'), game: document.getElementById('game-screen'), gameover: document.getElementById('gameover-screen') };
+    const countdownOverlay = document.getElementById('countdown-overlay'), countdownText = document.getElementById('countdown-text');
+    const hudScore = document.getElementById('hud-score'), hudBest = document.getElementById('hud-best'), hudCombo = document.getElementById('hud-combo');
+    const timerText = document.getElementById('timer-text'), timerFill = document.getElementById('timer-fill'), questionText = document.getElementById('question-text');
+    const choiceBtns = document.querySelectorAll('.choice-btn');
+
+    function triggerFeedback(type, btnIndex) {
+      flashOverlay.className = type === 'correct' ? 'flash-correct' : 'flash-wrong';
+      setTimeout(() => { flashOverlay.className = ''; }, 180);
+
+      if (choiceBtns[btnIndex]) {
+        const cls = type === 'correct' ? 'correct-flash' : 'wrong-flash';
+        choiceBtns[btnIndex].classList.add(cls);
+        setTimeout(() => choiceBtns[btnIndex].classList.remove(cls), 180);
+      }
+
+      if (type === 'wrong') {
+        appFrame.classList.remove('shake');
+        void appFrame.offsetWidth;
+        appFrame.classList.add('shake');
+      }
+    }
+
+    function showScreen(name) { Object.values(screens).forEach(s => s.classList.remove('active')); screens[name].classList.add('active'); }
+    function updateLobbyBest() {
+      const best = getMyRecord().score.toLocaleString();
+      document.getElementById('lobby-best-score').textContent = best;
+      hudBest.textContent = best;
+    }
+
+    function generateQuestion() {
+      const ops = ['+', '-', '×', '÷'];
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      let a, b, ans, expr;
+      if (op === '+') { a = rnd(); b = rnd(); ans = a + b; expr = `${a} + ${b}`; }
+      else if (op === '-') { a = rnd(); b = rnd(); if (a < b) [a, b] = [b, a]; ans = a - b; expr = `${a} - ${b}`; }
+      else if (op === '×') { a = rnd(); b = rnd(); ans = a * b; expr = `${a} × ${b}`; }
+      else { b = Math.floor(Math.random() * 8) + 2; ans = rnd(); a = b * ans; expr = `${a} ÷ ${b}`; }
+
+      const wrongSet = new Set();
+      while (wrongSet.size < 2) {
+        const candidate = ans + (Math.floor(Math.random() * 5) + 1) * (Math.random() < 0.5 ? 1 : -1);
+        if (candidate >= 0 && candidate !== ans) wrongSet.add(candidate);
+      }
+      const choices = [ans, ...Array.from(wrongSet)].sort(() => Math.random() - 0.5);
+      state.currentAnswer = ans; state.choices = choices;
+      questionText.textContent = expr;
+      choiceBtns.forEach((btn, idx) => { btn.querySelector('.choice-val').textContent = choices[idx]; });
+    }
+    function rnd() { return Math.floor(Math.random() * 9) + 1; }
+
+    function handleChoice(index) {
+      if (!state.isPlaying) return;
+      if (state.choices[index] === state.currentAnswer) {
+        state.combo += 1; if (state.combo > state.maxCombo) state.maxCombo = state.combo;
+        state.score += 100 + (state.combo - 1) * 15;
+        if (state.combo % 5 === 0) { state.timeLeft = Math.min(GAME_TIME, state.timeLeft + 1.5); }
+        sfx.playCorrect(state.combo);
+        triggerFeedback('correct', index);
+        updateHUD(); generateQuestion();
+      } else {
+        state.combo = 0; state.timeLeft = Math.max(0, state.timeLeft - 2.0);
+        sfx.playWrong();
+        triggerFeedback('wrong', index);
+        updateHUD();
+        if (state.timeLeft <= 0) endGame();
+      }
+    }
+
+    function updateHUD() {
+      hudScore.textContent = state.score.toLocaleString();
+      hudCombo.textContent = state.combo;
+      const clamped = Math.max(0, state.timeLeft);
+      timerText.textContent = `${clamped.toFixed(1)}s`;
+      timerFill.style.width = `${(clamped / GAME_TIME) * 100}%`;
+      if (clamped <= 10.0) { timerFill.classList.add('danger'); }
+      else { timerFill.classList.remove('danger'); }
+    }
+
+    function startGame() {
+      sfx.init(); sfx.playClick(); showScreen('game');
+      state.score = 0; state.combo = 0; state.maxCombo = 0; state.timeLeft = GAME_TIME;
+      updateHUD(); generateQuestion();
+
+      let count = 3; countdownText.textContent = count; countdownOverlay.classList.add('active');
+      const cd = setInterval(() => {
+        count--;
+        if (count > 0) countdownText.textContent = count;
+        else if (count === 0) countdownText.textContent = 'GO!';
+        else { clearInterval(cd); countdownOverlay.classList.remove('active'); runGameLoop(); }
+      }, 700);
+    }
+
+    function runGameLoop() {
+      state.isPlaying = true; state.lastTimestamp = performance.now();
+      state.timerInterval = setInterval(() => {
+        if (!state.isPlaying) return;
+        const now = performance.now();
+        state.timeLeft -= (now - state.lastTimestamp) / 1000;
+        state.lastTimestamp = now;
+        if (state.timeLeft <= 0) { state.timeLeft = 0; updateHUD(); endGame(); }
+        else { updateHUD(); }
+      }, 50);
+    }
+
+    function endGame() {
+      state.isPlaying = false; clearInterval(state.timerInterval); sfx.playGameOver();
+      const isNewBest = saveMyRecord(state.score, state.maxCombo);
+      submitScoreOnline(state.score, state.maxCombo);
+
+      document.getElementById('final-score').textContent = state.score.toLocaleString();
+      document.getElementById('gameover-best').textContent = `${getMyRecord().score.toLocaleString()} 점`;
+      document.getElementById('gameover-max-combo').textContent = `${state.maxCombo} 콤보`;
+      document.getElementById('new-record-badge').classList.toggle('show', isNewBest && state.score > 0);
+
+      updateLobbyBest(); showScreen('gameover');
+    }
+
+    document.getElementById('btn-start').addEventListener('click', startGame);
+    document.getElementById('btn-retry').addEventListener('click', startGame);
+    document.getElementById('btn-home').addEventListener('click', () => { sfx.playClick(); updateLobbyBest(); showScreen('title'); });
+    document.getElementById('btn-tutorial').addEventListener('click', () => { sfx.playClick(); document.getElementById('tutorial-modal').classList.add('active'); });
+    document.getElementById('btn-leaderboard').addEventListener('click', () => { sfx.playClick(); fetchOnlineLeaderboard(); document.getElementById('leaderboard-modal').classList.add('active'); });
+    
+    document.getElementById('btn-reset-rank').addEventListener('click', () => { sfx.playClick(); document.getElementById('confirm-reset-modal').classList.add('active'); });
+    document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
+      sfx.playClick(); localStorage.removeItem(STORAGE_KEY); updateLobbyBest();
+      document.getElementById('confirm-reset-modal').classList.remove('active');
+      document.getElementById('leaderboard-modal').classList.remove('active');
+    });
+
+    document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', (e) => {
+      sfx.playClick(); document.getElementById(e.target.getAttribute('data-close')).classList.remove('active');
+    }));
+
+    document.getElementById('btn-sound').addEventListener('click', (e) => { e.currentTarget.textContent = sfx.toggle() ? '🔊' : '🔇'; });
+    choiceBtns.forEach((btn, idx) => { btn.addEventListener('click', () => handleChoice(idx)); });
+
+    window.addEventListener('keydown', (e) => {
+      if (!state.isPlaying) return;
+      if (e.key === '1' || e.key === 'ArrowLeft') handleChoice(0);
+      else if (e.key === '2' || e.key === 'ArrowDown') handleChoice(1);
+      else if (e.key === '3' || e.key === 'ArrowRight') handleChoice(2);
+    });
+
+    updateLobbyBest();
+  </script>
 </body>
 </html>
