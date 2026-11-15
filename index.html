@@ -228,7 +228,7 @@
 
     .modal-body-content { padding: 16px; display: flex; flex-direction: column; overflow: hidden; flex: 1; }
 
-    /* 닉네임 미입력 커스텀 알림 팝업 전용 스타일 (요구사항 1 반영) */
+    /* 커스텀 알림 모달 팝업 */
     .custom-alert-box {
       width: 100%; max-width: 300px; background: #fff; border-radius: 12px; overflow: hidden;
       box-shadow: 0 20px 35px rgba(0,0,0,0.25); display: flex; flex-direction: column;
@@ -243,19 +243,26 @@
       padding: 0 16px 16px; display: flex; justify-content: center;
     }
 
-    /* 순위표 전체 스크롤 리스트 (요구사항 2 반영) */
+    /* 순위표 전체 스크롤 리스트 */
     .rank-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 280px; overflow-y: auto; padding-right: 4px; }
     .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; background: #f8fafc; border-radius: 10px; font-size: 0.88rem; font-weight: 700; flex-shrink: 0; }
     
-    /* 1, 2, 3위 배경 스타일 */
+    /* 1, 2, 3위 카드 배경 스타일 */
     .rank-item.top-1 { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1.5px solid #f59e0b; }
     .rank-item.top-2 { background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); border: 1.5px solid #94a3b8; }
     .rank-item.top-3 { background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%); border: 1.5px solid #f97316; }
 
     .rank-left { display: flex; align-items: center; gap: 10px; }
+    
+    /* 기본 순위 숫자 박스 스타일 */
     .rank-num { width: 26px; height: 26px; border-radius: 6px; background: #e2e8f0; color: #334155; font-size: 0.8rem; font-weight: 900; display: flex; justify-content: center; align-items: center; }
     
-    /* 요구사항 3: 메달이 닉네임 오른쪽에 뜨도록 설정 */
+    /* 1, 2, 3위 왼쪽 순위 숫자 박스 색상 (금, 은, 동) */
+    .rank-item.top-1 .rank-num { background: #f59e0b; color: #ffffff; }
+    .rank-item.top-2 .rank-num { background: #94a3b8; color: #ffffff; }
+    .rank-item.top-3 .rank-num { background: #f97316; color: #ffffff; }
+    
+    /* 닉네임 우측 메달 디자인 */
     .nickname-with-medal { display: inline-flex; align-items: center; gap: 5px; font-weight: 900; color: #0f172a; }
     .medal-icon { font-size: 0.95rem; }
 
@@ -339,7 +346,7 @@
 
       <footer class="footer-bar">
         <span>Made by F9m1is</span>
-        <span>v.1.3.4</span>
+        <span>v.1.3.5</span>
       </footer>
     </section>
 
@@ -432,7 +439,7 @@
       </div>
     </div>
 
-    <!-- 순위표 모달 (전체 순위 스크롤 지원 및 메달 위치 닉네임 오른쪽으로 변경) -->
+    <!-- 순위표 모달 -->
     <div id="leaderboard-modal" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header">
@@ -466,7 +473,7 @@
       </div>
     </div>
 
-    <!-- 요구사항 1: 커스텀 알림 모달 팝업 -->
+    <!-- 커스텀 알림 모달 팝업 -->
     <div id="custom-alert-modal" class="modal-backdrop">
       <div class="custom-alert-box">
         <div class="custom-alert-header">알림!</div>
@@ -570,7 +577,6 @@
       return false;
     }
 
-    // 요구사항 2 & 3: 전체 순위 출력 및 닉네임 우측 메달 표시
     async function fetchOnlineLeaderboard() {
       const listEl = document.getElementById('rank-list');
       listEl.innerHTML = '<li style="text-align:center; padding:20px; color:#6b7280;">랭킹 불러오는 중...</li>';
@@ -587,7 +593,6 @@
           else if (idx === 1) topClass = 'top-2';
           else if (idx === 2) topClass = 'top-3';
 
-          // 메달은 닉네임 오른쪽에 배치하기 위해 별도 마크업 구성
           let medalHtml = '';
           if (idx === 0) medalHtml = '<span class="medal-icon">🥇</span>';
           else if (idx === 1) medalHtml = '<span class="medal-icon">🥈</span>';
@@ -731,7 +736,6 @@
     function startGame() {
       const nickVal = nicknameInput.value.trim();
       if (!nickVal) {
-        // 요구사항 1: 브라우저 기본 알림 대신 커스텀 알림 팝업 오픈
         sfx.playClick();
         document.getElementById('custom-alert-modal').classList.add('active');
         return;
@@ -813,7 +817,6 @@
       document.getElementById('leaderboard-modal').classList.remove('active');
     });
 
-    // 커스텀 알림 팝업 확인 버튼 이벤트
     document.getElementById('custom-alert-ok').addEventListener('click', () => {
       sfx.playClick();
       document.getElementById('custom-alert-modal').classList.remove('active');
