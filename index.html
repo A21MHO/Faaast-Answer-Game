@@ -71,8 +71,10 @@
 
     /* 메인 타이틀 화면 */
     #title-screen { justify-content: space-between; padding: 0 22px 20px; }
+    
+    /* [요구사항 3 반영] 좌측 상단 체커플래그 마스크 영역 비율 확장 및 깔끔한 배치 */
     .flag-wrapper {
-      position: absolute; top: 0; left: 0; width: 270px; height: 260px;
+      position: absolute; top: 0; left: 0; width: 280px; height: 270px;
       pointer-events: none; z-index: 1; transform-origin: top left;
       animation: flagWave 3s ease-in-out infinite alternate;
     }
@@ -249,10 +251,10 @@
     <!-- 메인 타이틀 화면 -->
     <section id="title-screen" class="screen active">
       <div class="flag-wrapper">
-        <svg viewBox="0 0 240 230" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 250 240" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <clipPath id="flag-clip">
-              <path d="M 0,0 L 235,0 C 195,92 125,162 0,205 Z" />
+              <path d="M 0,0 L 235,0 C 195,95 125,165 0,210 Z" />
             </clipPath>
             <linearGradient id="wave-shadow" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#000000" stop-opacity="0.22" />
@@ -262,7 +264,7 @@
             </linearGradient>
           </defs>
           <g clip-path="url(#flag-clip)">
-            <rect x="-20" y="-20" width="280" height="270" fill="#f3f4f6" />
+            <rect x="-20" y="-20" width="290" height="280" fill="#f3f4f6" />
             <g transform="rotate(-19 85 75)">
               <rect x="-50" y="-50" width="50" height="50" fill="#090d16" />
               <rect x="50" y="-50" width="50" height="50" fill="#090d16" />
@@ -278,7 +280,7 @@
               <rect x="-50" y="150" width="50" height="50" fill="#090d16" />
               <rect x="50" y="150" width="50" height="50" fill="#090d16" />
             </g>
-            <rect x="-20" y="-20" width="280" height="270" fill="url(#wave-shadow)" />
+            <rect x="-20" y="-20" width="290" height="280" fill="url(#wave-shadow)" />
           </g>
         </svg>
       </div>
@@ -302,11 +304,11 @@
 
       <footer class="footer-bar">
         <span>Made by F9m1is</span>
-        <span>v.1.2.8</span>
+        <span>v.1.3.0</span>
       </footer>
     </section>
 
-    <!-- 3초 카운트다운 -->
+    <!-- [요구사항 4 반영] 3초 카운트다운 오버레이 (1000ms 정확한 간격 & 타이밍별 틱/고 효과음) -->
     <div id="countdown-overlay">
       <div id="countdown-text">3</div>
       <div id="countdown-sub">준비하세요!</div>
@@ -422,7 +424,7 @@
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzE3KKkJuCCKj4v7P8gPrb8LT6DybQ8q9_dv0nrfJQwAU9D-dxTkAbRObqG5tFRctoU/exec';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyj1mDVU4lKWYPMt_8NDIlDRou0qvLJtxKk7OIpetnoTSOIThdMZ_GGM_PC5umuHmD8/exec';
 
     const DEVICE_TOKEN_KEY = 'faaast_answer_device_token';
     const NICKNAME_KEY = 'faaast_answer_nickname';
@@ -440,6 +442,7 @@
       nicknameInput.value = savedNick;
     }
 
+    // [요구사항 2 반영] 닉네임 영구 잠금 상태 체크
     if (localStorage.getItem(NICKNAME_LOCKED_KEY) === 'true' && nicknameInput.value.trim() !== '') {
       nicknameInput.disabled = true;
     }
@@ -645,7 +648,7 @@
       localStorage.setItem(NICKNAME_LOCKED_KEY, 'true');
       nicknameInput.disabled = true;
 
-      // 게임 시작 버튼 클릭 효과음 제거 완료 후 즉시 진입
+      // [요구사항 4 반영] 게임 시작 버튼 클릭 시 삑 소리(playClick)를 제거하고 곧바로 카운트다운 진입
       sfx.init(); 
       showScreen('game');
       state.score = 0; state.combo = 0; state.maxCombo = 0; state.timeLeft = GAME_TIME;
@@ -669,7 +672,7 @@
           countdownOverlay.classList.remove('active');
           runGameLoop();
         }
-      }, 1000); // 정확한 1초(1000ms) 간격
+      }, 1000); // [요구사항 4 반영] 정확한 1초(1000ms) 간격 타이밍
     }
 
     function runGameLoop() {
@@ -705,7 +708,7 @@
     
     document.getElementById('btn-reset-rank').addEventListener('click', () => { sfx.playClick(); document.getElementById('confirm-reset-modal').classList.add('active'); });
     
-    // 초기화 시 로컬 점수 리셋 + 서버(구글 시트) 기록 0점 리셋 + 닉네임 잠금 해제 및 입력창 활성화 동기화
+    // [요구사항 1 & 2 반영] 초기화 시 로컬 기록 리셋 + 서버(구글 시트) 기록 0점 리셋 + 닉네임 잠금 해제 및 입력창 활성화
     document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
       sfx.playClick();
       localStorage.removeItem(STORAGE_KEY);
